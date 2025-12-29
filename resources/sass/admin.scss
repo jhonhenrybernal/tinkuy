@@ -1,0 +1,251 @@
+body {
+    display: flex;
+}
+#sidebar {
+    width: 250px;
+    background: #2D2D2D;
+    color: #E0E0E0;
+    height: 100vh;
+    position: fixed;
+    transition: all 0.3s;
+    overflow: scroll;
+    padding-top: 20px;
+}
+#sidebar.collapsed {
+    width: 80px;
+}
+#sidebar .nav-link {
+    color: #E0E0E0;
+    white-space: nowrap;
+}
+#sidebar .nav-link:hover {
+    background: #3A3A3A;
+}
+#sidebar .nav-link.active {
+    background: #4A4A4A;
+}
+#sidebar.collapsed .nav-link span:not(:first-child) {
+    display: none;
+}
+#sidebar.collapsed .nav-link i {
+    margin-right: 0;
+}
+#sidebar.collapsed .collapse, #sidebar.collapsed .nav-link i.fas.fa-chevron-down {
+    display: none !important;
+}
+#content {
+    margin-left: 250px;
+    flex-grow: 1;
+    transition: all 0.3s;
+}
+#sidebar.collapsed + #content {
+    margin-left: 80px;
+}
+.dropdown-toggle i {
+    font-size: 0.8rem;
+}
+.search-container {
+    padding: 0 15px;
+    margin-bottom: 15px;
+}
+#sidebar.collapsed .search-container {
+    display: none;
+}
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.logo-container img {
+    max-width: 100px;
+}
+#sidebar.collapsed .logo-container {
+    display: none;
+}
+.dt-heading{
+    font-size: 1.1rem;
+}
+.dt-trash{
+    padding: 4px 10px  !important;
+    cursor: pointer;
+}
+
+table.dataTable {
+    width: 100%;
+    background-color: #fff;
+}
+
+table.dataTable thead tr th {
+    background-color: #f4f7f6 !important;
+}
+
+table.dataTable thead th {
+    color: #2D2D2D;
+    font-weight: 600;
+}
+
+table.dataTable td,
+table.dataTable th {
+    border: none !important;
+}
+
+table.dataTable tbody tr:hover{
+    background-color: #f4f7f6 !important;
+    cursor: pointer;
+}
+  
+table.dataTable td,
+table.dataTable th {
+    padding: 1rem;
+}
+
+
+.dataTables_filter input {
+    border-radius: 0.5rem !important;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    width: auto;
+}
+
+.dataTables_filter input::placeholder {
+    color: #333333;
+    font-style: italic;
+}
+
+.table > :not(caption) > * > * {
+    background-color: transparent !important;
+}
+
+.dataTables_paginate {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.dataTables_paginate .paginate_button {
+    border-radius: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    margin: 0 0.125rem;
+    color: #007bff;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.dataTables_paginate .paginate_button:hover {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.dataTables_paginate .paginate_button.current {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.dataTables_paginate .paginate_button:disabled {
+    color: #ccc;
+    background-color: #f8f9fa;
+    border-color: #ddd;
+}
+
+.dataTables_paginate .paginate_button:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+}
+
+.dataTables_paginate .paginate_button.previous,
+.dataTables_paginate .paginate_button.next {
+    font-size: 16px;    
+}
+
+.dataTables_info {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 16px; 
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 50px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px; 
+    border-radius: 50px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(14px);
+}
+.card-header-bg{
+    background-color: #595959 !important
+}
+
+.border-edit{
+    border-color: #4A90E2 !important
+}
+
+.pencil-edit-color{
+    border-color: #4A90E2 !important
+}
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.nav-tabs .nav-link {
+    color: black;
+    font-weight: normal;
+}
+.nav-tabs .nav-link.active {
+    font-weight: 500;
+    color: #007bff !important;
+}
+.btn-primary {
+    width: auto;
+}
+
+.cart-info{
+    height: 54px;
+    display: inline-block;
+    background: #111;
+    color: #fff;
+    padding: 0 27px;
+    border-radius: 42px;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 54px;
+    position: relative;
+}

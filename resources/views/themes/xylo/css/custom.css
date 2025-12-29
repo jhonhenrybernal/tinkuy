@@ -1,0 +1,404 @@
+.navigation button .count {
+    width: 18px;
+    height: 18px;
+    line-height: 15px;
+    font-size: 11px;
+    right: 11px;
+    top: 4px;
+    font-weight: 500;
+    padding: 2px 3px;
+}
+
+.language-drop{
+    border: none;
+    font-weight: 600;
+}
+.language-drop:focus{
+    border: none;
+}
+
+.cart-view{
+    color: #ffffff;
+}
+
+.proceed-to-checkout{
+    background: linear-gradient(to right, #6d3faa, #d08dc3);
+    color: white;
+    border: none;
+    padding: 10px 26px !important;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-weight: 700;
+}
+
+.proceed-to-checkout:hover {
+    background: linear-gradient(to right, #5b2d89, #b06ca4);
+}
+
+.phone-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #ffffff;
+    color: #111111;
+    border-radius: 50%;
+    font-size: 16px;
+}
+
+.currency-form{
+    width: auto !important;
+    max-width: none !important;
+}
+
+.language-form{
+    width: auto !important;
+    max-width: none !important;
+}
+.account-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    width: 150px;
+    display: none;
+    z-index: 1050;
+}
+.account-menu.show {
+    display: block;
+}
+.account-menu li {
+    list-style: none;
+    padding: 5px 0;
+}
+.account-menu a {
+    text-decoration: none;
+    color: black;
+    display: block;
+    padding: 5px 10px;
+}
+.account-menu a:hover {
+    background: #f5f5f5;
+    border-radius: 5px;
+}
+
+.header-categories {
+    width: 25vw;
+    height: 50px;
+    background: #f6f6f6;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-radius: 25px;
+    justify-content: flex-end;
+}
+.header-categories .input-group {
+    flex-grow: 1;
+}
+.header-categories form {
+    width: 100%;
+}
+.header-categories input {
+    flex-grow: 1;
+    border: none;
+    height: 40px;
+}
+.header-categories button {
+    background: transparent;
+    border: none;
+}
+
+.language-drop {
+    background-color: #111111;
+    color: white;
+}
+
+.language-drop option {
+    color: black;
+    background: white;
+}
+
+.language-drop option:hover {
+    background-color: #ddd;
+}
+
+.green{
+    background-color: green;
+}
+
+.header-top-bar{   
+    background: var(--cardbg);
+    color: var(--main-color);
+    --bs-text-opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-text-color{
+    color: var(--main-color);
+}
+
+.font-style{
+    font-size: 16px;
+    color: var(--main-color);
+    
+}
+
+.homepage-icon i{
+    font-size: 20px;
+}
+
+.search-input-width{
+    width: 37%;
+}
+
+.search-style{
+    background: var(--main-color);
+}
+.search-style i{
+    color: var(--white);
+}
+
+.sec-heading{
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--dark-color);
+    text-transform: uppercase;
+}
+
+/* new css */
+
+.top-bar{
+    height: 45px;
+}
+header{
+    text-transform: uppercase;
+    padding-bottom:10px;
+}
+header .form-select{
+    border: none;
+}
+
+header nav ul li{
+    position: relative;
+}
+header nav ul li a{
+    position: relative;
+}
+header nav ul li a::after{ 
+     content:'';
+     position: absolute;
+     left: 10px;
+     bottom: 5px;
+     width: 80%;
+     transform: scaleX(0);
+     height:1px;
+     background: #000;
+     transition: transform 0.25s ease-out;
+     z-index:100;
+}
+header nav ul li a:hover::after {
+    transform: scaleX(1);
+  }
+header form input[type="text"]{
+    border: 1px solid #cccccc;
+}
+header form  input[type="submit"]{
+    border-top-right-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+}
+
+.price {
+    font-weight: 500;
+}
+
+.price .original {
+    color: var(--main-color);
+}
+
+.price .original.has-discount {
+    color: var(--main-color-light);
+    text-decoration: line-through;
+}
+
+.price .discount {
+    color: red;
+    margin-left: 8px;
+}
+
+.slider-for {
+    width: 100%;
+    max-width: 600px; /* or whatever width your layout allows */
+    margin: auto;
+}
+
+.slider-for img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+/* Arrow buttons styles */
+.slick-prev,
+.slick-next {
+    /*background: var(--main-color-light);
+    color: white;*/
+    font-size: 24px;
+    padding: 10px;
+    border: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    border-radius: 50%; /* Optional: Makes arrows circular */
+}
+
+.slick-prev:before, .slick-next:before{
+    color: var(--main-color);
+}
+
+/* Positioning the arrows */
+.slick-prev {
+    left: 10px; /* Left arrow position */
+}
+
+.slick-next {
+    right: 10px; /* Right arrow position */
+}
+
+.product-img {
+    height: 300px; /* Or any height you want for consistency */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-img img {  
+    height: 100%;
+    width: auto;
+    object-fit: contain; /* or cover depending on the visual preference */
+    display: block;
+}
+
+.search-product-title{
+    text-transform: capitalize;
+}
+
+/* 6-04-2025 */
+
+.shipping_info .form-control{
+    border: none;
+    background: #f1f1f1;
+    height: 50px;
+}
+.shipping_info .form-select{
+    border: none;
+    background-color: #f1f1f1;
+    height: 45px;
+}
+
+.shipping_info .h-6{
+ height: 25px;
+ width: auto;
+}
+
+.alert-success i{
+    font-size: 34px;
+    color: green;
+}
+
+/* end 6-04-2025 */
+
+
+/* Scoped CSS for product review section */
+.product-detail-customer-review {
+    margin-top: 30px;
+}
+
+.product-detail-customer-review h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.product-detail-customer-review ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.product-detail-customer-review li {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-detail-customer-review .review-customer-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.product-detail-customer-review .review-customer-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.product-detail-customer-review .review-customer-info strong {
+    font-weight: bold;
+}
+
+.product-detail-customer-review .review-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.product-detail-customer-review .star {
+    font-size: 30px;
+    margin-right: 5px;
+    color: var(--main-color);
+}
+
+.product-detail-customer-review .star.filled {
+    color: var(--main-color);
+}
+.product-detail-customer-review .star.unfilled {
+    color: #ccc; /* Lighter color for unfilled stars */
+}
+.product-detail-customer-review .review-time {
+    font-size: 0.9rem;
+    color: #777;
+    margin-left: 10px;
+}
+
+.product-detail-customer-review .average-rating {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #444;
+}
+
+.product-detail-customer-review .average-rating strong {
+    color: #333;
+}
+
+.product-detail-customer-review p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555;
+}
+
+.product-detail-customer-review small {
+    font-size: 0.9rem;
+    color: #777;
+}
