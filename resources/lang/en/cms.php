@@ -329,36 +329,51 @@ return [
 
     'vendors' => [
         'title_list' => 'Vendor List',
-        'id' => 'Id',
-        'name' => 'Name',
-        'email' => 'Email',
-        'phone' => 'Phone',
-        'status' => 'Status',
-        'actions' => 'Actions',
+        'id'         => 'ID',
+        'name'       => 'Name',
+        'email'      => 'Email',
+        'phone'      => 'Phone',
+        'status'     => 'Status',
+        'actions'    => 'Actions',
+
+        // Formularios (crear / editar)
         'register_new_vendor' => 'Register New Vendor',
-        'vendor_name' => 'Vendor Name',
-        'vendor_email' => 'Vendor Email',
-        'phone_optional' => 'Phone (Optional)',
-        'password' => 'Password',
-        'confirm_password' => 'Confirm Password',
-        'status' => 'Status',
-        'active' => 'Active',
+        'edit_vendor'         => 'Edit Vendor',
+
+        'vendor_name'        => 'Vendor Name',
+        'vendor_email'       => 'Vendor Email',
+        'phone_optional'     => 'Phone (Optional)',
+        'password'           => 'Password',
+        'confirm_password'   => 'Confirm Password',
+
+        'logo'               => 'Logo',
+        'description'        => 'Description',
+        'page_type'          => 'Page Template',
+        'page_type_landing_1'=> 'Template 1 – Classic landing',
+        'page_type_landing_2'=> 'Template 2 – Catalog-focused',
+        'page_type_landing_3'=> 'Template 3 – Minimal / branding',
+
+        'active'   => 'Active',
         'inactive' => 'Inactive',
-        'banned' => 'Banned',
+        'banned'   => 'Banned',
+
         'register_button' => 'Register Vendor',
-        'cancel_button' => 'Cancel',
+        'save_changes'    => 'Save Changes',
+        'cancel'          => 'Cancel',
 
-        'active' => 'Active',
-        'inactive' => 'Inactive',
-
+        // Modales / acciones
         'modal_confirm_delete_title' => 'Confirm Delete',
-        'modal_confirm_delete_body' => 'Are you sure you want to delete this vendor?',
-        'delete' => 'Delete',
-        'cancel' => 'Cancel',
+        'modal_confirm_delete_body'  => 'Are you sure you want to delete this vendor?',
+        'delete'                     => 'Delete',
 
-        'success' => 'Success',
-        'error_delete' => 'Error deleting vendor! Please try again.',
+        // Mensajes flash
+        'success'        => 'Success',
+        'success_store'  => 'Vendor registered successfully!',
+        'success_update' => 'Vendor updated successfully!',
+        'success_delete' => 'Vendor deleted successfully.',
+        'error_delete'   => 'Error deleting vendor! Please try again.',
     ],
+
 
     'languages' => [
         'english' => 'English',

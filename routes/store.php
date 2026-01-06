@@ -17,6 +17,7 @@ use App\Http\Controllers\Store\SearchController;
 use App\Http\Controllers\Store\ShopController;
 use App\Http\Controllers\Store\WishlistController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\VendorTemplateController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StoreController::class, 'index'])->name('xylo.home');
@@ -79,3 +80,6 @@ Route::prefix('customer')->name('customer.')->group(function () {
 });
 
 Route::get('/stripe/checkout', [StripeController::class, 'checkout'])->name('stripe.checkout.process');
+
+Route::get('/vendors/company/{id}', [VendorTemplateController::class, 'templateCompany'])
+        ->name('vendors.company-preview');

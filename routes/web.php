@@ -119,10 +119,17 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     /* Vendors */
     Route::get('vendors', [VendorController::class, 'index'])->name('vendors.index');
-    Route::get('vendors/data', [VendorController::class, 'getVendorData'])->name('vendors.data');
-    Route::delete('vendors/{id}', [VendorController::class, 'destroy'])->name('vendors.destroy');
     Route::get('vendors/create', [VendorController::class, 'create'])->name('vendors.create');
+    Route::get('vendors/data', [VendorController::class, 'getVendorData'])->name('vendors.data');
+    Route::get('vendors/{id}', [VendorController::class, 'edit'])->name('vendors.edit');
+    Route::delete('vendors/{id}', [VendorController::class, 'destroy'])->name('vendors.destroy');
     Route::post('vendors', [VendorController::class, 'store'])->name('vendors.store');
+    Route::put('vendors/{id}', [VendorController::class, 'update'])->name('vendors.update');
+    Route::get('vendors/template-preview/{pageType}', [VendorController::class, 'templatePreview'])
+    ->name('vendors.template-preview');
+    Route::post('vendors/resize-media', [VendorController::class, 'resizeMedia'])
+    ->name('vendors.resize-media');
+
 
     /* Pages */
     Route::resource('pages', PageController::class);

@@ -327,40 +327,54 @@ return [
         'delete_error_message' => '¡Error al eliminar al cliente!',
     ],
 
-    'vendors' => [
+   'vendors' => [
+        // Listado
         'title_list' => 'Lista de proveedores',
-        'id' => 'ID',
-        'name' => 'Nombre',
-        'email' => 'Correo Electrónico',
-        'phone' => 'Teléfono',
-        'status' => 'Estado',
-        'actions' => 'Acciones',
+        'id'         => 'ID',
+        'name'       => 'Nombre',
+        'email'      => 'Correo electrónico',
+        'phone'      => 'Teléfono',
+        'status'     => 'Estado',
+        'actions'    => 'Acciones',
+
+        // Formularios (crear / editar)
         'register_new_vendor' => 'Registrar nuevo proveedor',
-        'vendor_name' => 'Nombre del proveedor',
-        'vendor_email' => 'Correo electrónico del proveedor',
-        'phone_optional' => 'Teléfono (opcional)',
-        'password' => 'Contraseña',
-        'confirm_password' => 'Confirmar contraseña',
-        'status' => 'Estado',
-        'active' => 'Activo',
+        'edit_vendor'         => 'Editar proveedor',
+
+        'vendor_name'        => 'Nombre del proveedor',
+        'vendor_email'       => 'Correo electrónico del proveedor',
+        'phone_optional'     => 'Teléfono (opcional)',
+        'password'           => 'Contraseña',
+        'confirm_password'   => 'Confirmar contraseña',
+
+        'logo'               => 'Logo',
+        'description'        => 'Descripción',
+        'page_type'          => 'Plantilla de página',
+        'page_type_landing_1'=> 'Plantilla 1 – Landing clásica',
+        'page_type_landing_2'=> 'Plantilla 2 – Enfoque en catálogo',
+        'page_type_landing_3'=> 'Plantilla 3 – Minimal / branding',
+
+        'active'   => 'Activo',
         'inactive' => 'Inactivo',
-        'banned' => 'Bloqueado',
+        'banned'   => 'Bloqueado',
+
         'register_button' => 'Registrar proveedor',
-        'cancel_button' => 'Cancelar',
+        'save_changes'    => 'Guardar cambios',
+        'cancel'          => 'Cancelar',
+        'cancel_button'   => 'Cancelar', // por si en algún lugar usas esta clave
 
-        'active' => 'Activo',
-        'inactive' => 'Inactivo',
+        // Modales / acciones
+        'modal_confirm_delete_title' => 'Confirmar eliminación',
+        'modal_confirm_delete_body'  => '¿Está seguro de que desea eliminar este proveedor?',
+        'delete'                     => 'Eliminar',
 
-        'modal_confirm_delete_title' => 'Confirmar Eliminación',
-        'modal_confirm_delete_body' => '¿Está seguro de que desea eliminar este proveedor?',
-        'delete' => 'Eliminar',
-        'cancel' => 'Cancelar',
-
-        'success' => 'Éxito',
-        'success_delete' => '¡Vendedor eliminado con éxito!',
-        'error_delete' => '¡Error al eliminar el proveedor! Por favor, inténtelo de nuevo.',
+        // Mensajes flash
+        'success'        => 'Éxito',
+        'success_store'  => '¡Proveedor registrado con éxito!',
+        'success_update' => '¡Proveedor actualizado con éxito!',
+        'success_delete' => '¡Proveedor eliminado con éxito!',
+        'error_delete'   => '¡Error al eliminar el proveedor! Por favor, inténtelo de nuevo.',
     ],
-
     'languages' => [
         'english' => 'Inglés',
         'spanish' => 'Español',

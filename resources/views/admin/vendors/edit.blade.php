@@ -3,16 +3,17 @@
 @section('content')
 <div class="card mt-4">
     <div class="card-header card-header-bg text-white d-flex justify-content-between align-items-center">
-        <h6 class="mb-0 dt-heading">{{ __('cms.vendors.register_new_vendor') }}</h6>
+        <h6 class="mb-0 dt-heading">{{ __('cms.vendors.edit_vendor') }}</h6>
     </div>
 
     <div class="card-body">
-        <form action="{{ route('admin.vendors.store') }}"
+        <form action="{{ route('admin.vendors.update', $vendor->id) }}"
             method="POST"
             enctype="multipart/form-data"
             id="vendor-form"
-            data-mode="create">
+            data-mode="edit">
             @csrf
+            @method('PUT')
 
             <div class="row g-3">
                 {{-- Columna izquierda: datos básicos --}}
@@ -21,7 +22,7 @@
                         <label for="name" class="form-label">{{ __('cms.vendors.vendor_name') }}</label>
                         <input type="text" name="name" id="name"
                                class="form-control @error('name') is-invalid @enderror"
-                               value="{{ old('name') }}" maxlength="255">
+                               value="{{ old('name', $vendor->name) }}" maxlength="255">
                         @error('name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -31,7 +32,7 @@
                         <label for="email" class="form-label">{{ __('cms.vendors.vendor_email') }}</label>
                         <input type="email" name="email" id="email"
                                class="form-control @error('email') is-invalid @enderror"
-                               value="{{ old('email') }}" maxlength="255">
+                               value="{{ old('email', $vendor->email) }}" maxlength="255">
                         @error('email')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -41,7 +42,7 @@
                         <label for="phone" class="form-label">{{ __('cms.vendors.phone_optional') }}</label>
                         <input type="text" name="phone" id="phone"
                                class="form-control @error('phone') is-invalid @enderror"
-                               value="{{ old('phone') }}" maxlength="20">
+                               value="{{ old('phone', $vendor->phone) }}" maxlength="20">
                         @error('phone')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -51,9 +52,9 @@
                         <label for="status" class="form-label">{{ __('cms.vendors.status') }}</label>
                         <select name="status" id="status"
                                 class="form-select @error('status') is-invalid @enderror">
-                            <option value="active"   {{ old('status','active')=='active' ? 'selected' : '' }}>{{ __('cms.vendors.active') }}</option>
-                            <option value="inactive" {{ old('status')=='inactive' ? 'selected' : '' }}>{{ __('cms.vendors.inactive') }}</option>
-                            <option value="banned"   {{ old('status')=='banned' ? 'selected' : '' }}>{{ __('cms.vendors.banned') }}</option>
+                            <option value="active"   {{ old('status', $vendor->status)=='active' ? 'selected' : '' }}>{{ __('cms.vendors.active') }}</option>
+                            <option value="inactive" {{ old('status', $vendor->status)=='inactive' ? 'selected' : '' }}>{{ __('cms.vendors.inactive') }}</option>
+                            <option value="banned"   {{ old('status', $vendor->status)=='banned' ? 'selected' : '' }}>{{ __('cms.vendors.banned') }}</option>
                         </select>
                         @error('status')
                             <small class="text-danger">{{ $message }}</small>
@@ -79,7 +80,6 @@
                         <small id="password-error-js" class="text-danger d-block" style="display:none;"></small>
                     </div>
 
-
                     <div class="mb-3">
                         <label for="password_confirmation" class="form-label">{{ __('cms.vendors.confirm_password') }}</label>
                         <input type="password" name="password_confirmation" id="password_confirmation"
@@ -93,8 +93,8 @@
                     <div class="mb-3">
                         <label for="profile_image" class="form-label">{{ __('cms.vendors.logo') }}</label>
                         <input type="file" name="profile_image" id="profile_image"
-                               class="form-control @error('profile_image') is-invalid @enderror"
-                               accept="image/*">
+                            class="form-control @error('profile_image') is-invalid @enderror"
+                            accept="image/*">
                         @error('profile_image')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -102,17 +102,19 @@
                             JPG, PNG, WEBP · máximo 2MB. Tamaño recomendado: al menos 200×200 px.
                         </small>
 
-                        {{-- Vista previa del logo (solo cuando se seleccione uno) --}}
+                        {{-- Vista previa del logo (actual o nueva selección) --}}
                         <div class="mt-2">
                             <small class="d-block text-muted mb-1">Vista previa del logo:</small>
                             <img
                                 id="logo-preview"
-                                src=""
+                                src="{{ $vendor->profile_image ? url('storage/'.$vendor->profile_image) : '' }}"
                                 alt="Logo"
                                 class="img-thumbnail"
-                                style="width:80px;height:80px;object-fit:contain;background:#fff;display:none;">
+                                style="width:80px;height:80px;object-fit:contain;background:#fff;{{ $vendor->profile_image ? '' : 'display:none;' }}"
+                            >
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -122,75 +124,145 @@
             <div class="mb-3">
                 <label for="description" class="form-label">{{ __('cms.vendors.description') }}</label>
                 <textarea name="description" id="description" rows="4"
-                          class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
+                          class="form-control @error('description') is-invalid @enderror">{{ old('description', $vendor->description) }}</textarea>
                 @error('description')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
 
             @php
-                // En create no hay media previa
-                $existingBanners = [];
-                $existingCompanyImages = [];
+                $companyMedia = $vendor->company_media ?? [];
+                $existingBanners = '';
+                if (is_array($companyMedia['banners'] ?? null)) {
+                    $existingBanners = collect($companyMedia['banners'])
+                        ->map(fn($item) => $item['path'] ?? '')
+                        ->filter()
+                        ->implode(', ');
+                }
+
+                $existingCompanyImages = '';
+                if (is_array($companyMedia['company_images'] ?? null)) {
+                    $existingCompanyImages = collect($companyMedia['company_images'])
+                        ->map(fn($item) => $item['path'] ?? '')
+                        ->filter()
+                        ->implode(', ');
+                }
             @endphp
 
-            {{-- Banners --}}
+           @php
+                $companyMedia = $vendor->company_media ?? [];
+                $existingBanners = $companyMedia['banners'] ?? [];
+                $existingCompanyImages = $companyMedia['company_images'] ?? [];
+            @endphp
+
+          {{-- Banners --}}
             <div class="mb-3">
                 <label for="banners" class="form-label">Banners (imágenes)</label>
                 <input type="file"
-                       name="banners_input[]"
-                       id="banners"
-                       class="form-control @error('banners.*') is-invalid @enderror"
-                       accept="image/*"
-                       multiple>
-                @error('banners.*')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
+                    name="banners_input[]"
+                    id="banners"
+                    class="form-control"
+                    accept="image/*"
+                    multiple>
                 <small class="text-muted d-block mt-1">
-                    Máx. 3 imágenes. Tamaño mínimo aprox: 1200×350 px.
-                    Se redimensionarán automáticamente a ~1400×450 px si son más grandes.
+                    Máx. 3 imágenes. Tamaño mínimo aprox: 1200×350 px. Se redimensionarán automáticamente a ~1400×450 px si son más grandes.
                 </small>
 
+                {{-- Preview de banners redimensionados --}}
                 <div id="banners-preview" class="mt-2 d-flex flex-wrap gap-2">
-                    {{-- sin contenido inicial en create --}}
+                    @if(!empty($existingBanners))
+                        @foreach($existingBanners as $item)
+                            @php $path = $item['path'] ?? null; @endphp
+                            @if($path)
+                                <img src="{{ url('storage/'.$path) }}" alt="Banner actual"
+     class="img-thumbnail" style="max-height:80px;">
+                            @endif
+                        @endforeach
+                    @endif
                 </div>
+
+                {{-- Inputs hidden donde guardaremos los paths de las imágenes redimensionadas --}}
                 <div id="banners-paths-container">
-                    {{-- inputs hidden se irán agregando via JS --}}
+                    @if(!empty($existingBanners))
+                        @foreach($existingBanners as $item)
+                            @php $path = $item['path'] ?? null; @endphp
+                            @if($path)
+                                <input type="hidden" name="banners_paths[]" value="{{ $path }}">
+                            @endif
+                        @endforeach
+                    @endif
                 </div>
             </div>
 
-            {{-- Imágenes de empresa / video --}}
+            {{-- Imágenes de empresa --}}
+            @php
+                use Illuminate\Support\Str;
+
+                $companyMedia = $vendor->company_media ?? [];
+                $existingCompanyImages = $companyMedia['company_images'] ?? [];
+            @endphp
+
+            {{-- Imágenes de empresa / Video --}}
             <div class="mb-3">
                 <label for="company_images" class="form-label">Imágenes de empresa / video</label>
                 <input type="file"
-                       name="company_images_input[]"
-                       id="company_images"
-                       class="form-control @error('company_images.*') is-invalid @enderror"
-                       accept="image/*,video/mp4"
-                       multiple>
-                @error('company_images.*')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
+                    name="company_images_input[]"
+                    id="company_images"
+                    class="form-control"
+                    accept="image/*,video/mp4"
+                    multiple>
+
                 <small class="text-muted d-block mt-1">
                     Máx. 3 archivos.  
                     Opción A: 3 imágenes.  
                     Opción B: 2 imágenes + 1 video MP4 vertical (9:16, 1080×1920 px).
                 </small>
 
+                {{-- Preview de imágenes / video actuales --}}
                 <div id="company-images-preview" class="mt-2 d-flex flex-wrap gap-2">
-                    {{-- sin contenido inicial en create --}}
+                    @foreach($existingCompanyImages as $item)
+                        @php $path = $item['path'] ?? null; @endphp
+                        @if($path)
+                            @if(Str::endsWith(Str::lower($path), '.mp4'))
+                                <video
+                                    src="{{ url('storage/'.$path) }}"
+                                    class="img-thumbnail"
+                                    style="max-height:80px;"
+                                    controls
+                                    muted
+                                ></video>
+                            @else
+                                <img
+                                    src="{{ url('storage/'.$path) }}"
+                                    alt="Imagen empresa actual"
+                                    class="img-thumbnail"
+                                    style="max-height:80px;"
+                                >
+                            @endif
+                        @endif
+                    @endforeach
                 </div>
+
+                {{-- Inputs hidden para paths (imágenes y/o video) --}}
                 <div id="company-images-paths-container">
-                    {{-- inputs hidden se irán agregando via JS --}}
+                    @foreach($existingCompanyImages as $item)
+                        @php $path = $item['path'] ?? null; @endphp
+                        @if($path)
+                            <input type="hidden" name="company_images_paths[]" value="{{ $path }}">
+                        @endif
+                    @endforeach
                 </div>
             </div>
+
+
 
             {{-- Tipo de página / plantilla --}}
             <div class="mb-3">
                 <label class="form-label d-block">{{ __('cms.vendors.page_type') }}</label>
 
                 @php
-                    $selectedPageType = old('page_type', 'landing_1'); // por defecto plantilla 1
+                    $selectedPageType = old('page_type', $vendor->page_type ?? 'landing_1');
+                    $vendorIdForPreview = $vendor->id;
                 @endphp
 
                 <div class="row g-3">
@@ -206,7 +278,7 @@
                             </div>
                             <p class="small text-muted mb-2">Banner grande, descripción + imágenes laterales.</p>
                             <button type="button" class="btn btn-sm btn-outline-primary"
-                                    onclick="openTemplatePreview('landing_1', null)">
+                                    onclick="openTemplatePreview('landing_1', '{{ $vendorIdForPreview }}')">
                                 Vista previa
                             </button>
                         </div>
@@ -224,7 +296,7 @@
                             </div>
                             <p class="small text-muted mb-2">Banner y descripción lado a lado.</p>
                             <button type="button" class="btn btn-sm btn-outline-primary"
-                                    onclick="openTemplatePreview('landing_2', null)">
+                                    onclick="openTemplatePreview('landing_2', '{{ $vendorIdForPreview }}')">
                                 Vista previa
                             </button>
                         </div>
@@ -242,7 +314,7 @@
                             </div>
                             <p class="small text-muted mb-2">Estilo más minimal / branding.</p>
                             <button type="button" class="btn btn-sm btn-outline-primary"
-                                    onclick="openTemplatePreview('landing_3', null)">
+                                    onclick="openTemplatePreview('landing_3', '{{ $vendorIdForPreview }}')">
                                 Vista previa
                             </button>
                         </div>
@@ -255,18 +327,18 @@
             </div>
 
             <div class="mt-4 d-flex gap-2">
-                <button type="submit" class="btn btn-success">
-                    {{ __('cms.vendors.register_button') }}
+                <button type="submit" class="btn btn-primary">
+                    {{ __('cms.vendors.save_changes') }}
                 </button>
                 <a href="{{ route('admin.vendors.index') }}" class="btn btn-secondary">
-                    {{ __('cms.vendors.cancel_button') }}
+                    {{ __('cms.vendors.cancel') }}
                 </a>
             </div>
         </form>
     </div>
 </div>
 
-{{-- Modal de vista previa de plantilla --}}
+{{-- Modal de vista previa --}}
 <div class="modal fade" id="templatePreviewModal" tabindex="-1" aria-labelledby="templatePreviewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
@@ -286,14 +358,7 @@
 
 @section('js')
 <script>
-    function showImageError(message) {
-        if (window.toastr) {
-            toastr.error(message);
-        } else {
-            alert(message);
-        }
-    }
-
+    // --- Vista previa de plantillas ---
     function openTemplatePreview(pageType, vendorId) {
         let baseUrl = "{{ route('admin.vendors.template-preview', ['pageType' => 'PLACEHOLDER']) }}";
         baseUrl = baseUrl.replace('PLACEHOLDER', pageType);
@@ -312,6 +377,19 @@
         modal.show();
     }
 
+    function showImageError(message) {
+        if (window.toastr) {
+            toastr.error(message);
+        } else {
+            alert(message);
+        }
+    }
+
+    /**
+     * Logo preview + validación tamaño mínimo
+     * - Si es muy pequeño, se muestra mensaje y se limpia el input.
+     * - Si es suficientemente grande, se muestra en 80x80 (object-fit: contain).
+     */
     function setupLogoPreview() {
         const input = document.getElementById('profile_image');
         const preview = document.getElementById('logo-preview');
@@ -341,6 +419,7 @@
                         return;
                     }
 
+                    // OK: mostramos vista previa
                     preview.src = e.target.result;
                     preview.style.display = 'inline-block';
                 };
@@ -351,50 +430,13 @@
         });
     }
 
-    // helper para video
-    function getVideoDimensions(file) {
-        return new Promise((resolve, reject) => {
-            const url = URL.createObjectURL(file);
-            const video = document.createElement('video');
-
-            video.preload = 'metadata';
-            video.onloadedmetadata = function () {
-                URL.revokeObjectURL(url);
-                resolve({
-                    width:  video.videoWidth,
-                    height: video.videoHeight,
-                });
-            };
-            video.onerror = function () {
-                URL.revokeObjectURL(url);
-                reject(new Error('No se pudo leer el video'));
-            };
-
-            video.src = url;
-        });
-    }
-
-    function getExistingMediaStats(hiddenContainer) {
-        const hiddenInputs = hiddenContainer.querySelectorAll('input[type="hidden"]');
-        let images = 0;
-        let videos = 0;
-
-        hiddenInputs.forEach(input => {
-            const value = (input.value || '').toLowerCase();
-            if (value.endsWith('.mp4')) {
-                videos++;
-            } else {
-                images++;
-            }
-        });
-
-        return {
-            images,
-            videos,
-            total: hiddenInputs.length,
-        };
-    }
-
+    /**
+     * Sube archivos al backend para redimensionar (imágenes) y guardar (video),
+     * y devuelve paths + preview.
+     *
+     * Para type = 'banner' -> solo imágenes.
+     * Para type = 'company' -> 3 imágenes o 2 imágenes + 1 video MP4 (9:16 1080x1920).
+     */
     function setupRemoteResize(inputId, type, previewContainerId, hiddenContainerId) {
         const input = document.getElementById(inputId);
         const previewContainer = document.getElementById(previewContainerId);
@@ -406,10 +448,11 @@
             const files = Array.from(this.files);
             if (files.length === 0) return;
 
-            const existing = getExistingMediaStats(hiddenContainer);
+            const existing = getExistingMediaStats(hiddenContainer); // 👈 ya guardados
 
             try {
                 if (type === 'banner') {
+                    // SOLO IMÁGENES, máx 3 en total
                     if (existing.total + files.length > 3) {
                         showImageError(
                             `Máximo 3 banners. Ya tienes ${existing.total} y estás intentando subir ${files.length} más.`
@@ -426,6 +469,7 @@
                     }
 
                 } else if (type === 'company') {
+                    // IMÁGENES + VIDEO
                     const newImages = files.filter(f => f.type.startsWith('image/'));
                     const newVideos = files.filter(f => f.type === 'video/mp4');
                     const others = files.filter(
@@ -441,6 +485,7 @@
                     const totalImages = existing.images + newImages.length;
                     const totalVideos = existing.videos + newVideos.length;
 
+                    // Máx 3 archivos en total
                     if (existing.total + files.length > 3) {
                         showImageError(
                             `Máximo 3 archivos en Imágenes de empresa. Ya tienes ${existing.total} y estás intentando subir ${files.length} más.`
@@ -449,6 +494,7 @@
                         return;
                     }
 
+                    // Máx 1 video en total
                     if (totalVideos > 1) {
                         showImageError('Solo se permite un (1) video MP4 en Imágenes de empresa.');
                         this.value = '';
@@ -456,12 +502,14 @@
                     }
 
                     if (totalVideos === 0) {
+                        // Solo imágenes en total: máx 3
                         if (totalImages > 3) {
                             showImageError('Máximo 3 imágenes en Imágenes de empresa.');
                             this.value = '';
                             return;
                         }
                     } else {
+                        // Hay 1 video en total: máx 2 imágenes
                         if (totalImages > 2) {
                             showImageError('Si tienes un video, solo puedes tener hasta 2 imágenes.');
                             this.value = '';
@@ -469,8 +517,10 @@
                         }
                     }
 
+                    // Si viene un nuevo video, validar orientación 1080x1920
                     if (newVideos.length > 0) {
                         const videoFile = newVideos[0];
+
                         const dims = await getVideoDimensions(videoFile);
                         const w = dims.width;
                         const h = dims.height;
@@ -486,6 +536,7 @@
                     }
                 }
 
+                // --- Si llegamos aquí, la combinación es válida ---
                 const formData = new FormData();
                 formData.append('type', type);
                 files.forEach(file => formData.append('media[]', file));
@@ -510,6 +561,8 @@
                     this.value = '';
                     return;
                 }
+
+                // 👇 YA NO LIMPIAMOS LO EXISTENTE; SOLO AGREGAMOS LO NUEVO
 
                 if (Array.isArray(data.errors) && data.errors.length > 0) {
                     data.errors.forEach(msg => showImageError(msg));
@@ -553,10 +606,16 @@
         });
     }
 
+
+
     document.addEventListener('DOMContentLoaded', function () {
+        // Logo
         setupLogoPreview();
 
+        // Banners
         setupRemoteResize('banners', 'banner', 'banners-preview', 'banners-paths-container');
+
+        // Imágenes de empresa
         setupRemoteResize('company_images', 'company', 'company-images-preview', 'company-images-paths-container');
         const form = document.getElementById('vendor-form');
         if (form) {
@@ -569,6 +628,48 @@
         }
     });
 
+    function getVideoDimensions(file) {
+        return new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(file);
+            const video = document.createElement('video');
+
+            video.preload = 'metadata';
+            video.onloadedmetadata = function () {
+                URL.revokeObjectURL(url);
+                resolve({
+                    width:  video.videoWidth,
+                    height: video.videoHeight,
+                });
+            };
+            video.onerror = function () {
+                URL.revokeObjectURL(url);
+                reject(new Error('No se pudo leer el video'));
+            };
+
+            video.src = url;
+        });
+    }
+
+    function getExistingMediaStats(hiddenContainer) {
+        const hiddenInputs = hiddenContainer.querySelectorAll('input[type="hidden"]');
+        let images = 0;
+        let videos = 0;
+
+        hiddenInputs.forEach(input => {
+            const value = (input.value || '').toLowerCase();
+            if (value.endsWith('.mp4')) {
+                videos++;
+            } else {
+                images++;
+            }
+        });
+
+        return {
+            images,
+            videos,
+            total: hiddenInputs.length,
+        };
+    }
     function validatePasswordOnSubmit(form) {
         const mode = form.dataset.mode || 'create'; // create | edit
         const passwordInput  = document.getElementById('password');

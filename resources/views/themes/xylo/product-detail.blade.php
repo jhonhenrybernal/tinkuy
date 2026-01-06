@@ -3,7 +3,20 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 @endsection
 @section('content')
-@php $currency = activeCurrency(); @endphp
+@php
+    $currency = activeCurrency();
+
+    // Datos de vendor (solo front por ahora, con valores de ejemplo)
+    $vendor      = $product->vendor ?? null;       // si ya existe relación, la usamos
+    $vendorName  = $vendor->name ?? 'Demo Vendor Name';
+    $vendorLogo  = ($vendor && $vendor->profile_image)
+        ? Storage::url($vendor->profile_image)
+        : asset('images/defaults/vendor-logo.png');
+
+    // URL de ejemplo a la plantilla 1 (luego la cambias por la ruta real)
+    $vendorUrl   = url('/vendors/company/'.$vendor->id);
+@endphp
+
 <section class="breadcrumb-section">
     <div class="container">
         <div class="breadcrumbs" aria-label="breadcrumb">
@@ -128,7 +141,33 @@
                     </div>
                     <button class="add-to-cart read-more" onclick="addToCart({{ $product->id }}, '{{ $product->product_type }}')">{{ __('store.product_detail.add_to_cart') }}</button>
                 </div>
-
+                                {{-- Bloque con logo + nombre de la compañía y link a la plantilla 1 --}}
+                <div class="mt-4">
+                    <a href="{{ $vendorUrl }}" class="text-decoration-none text-reset">
+                        <div class="d-flex align-items-center p-3 border rounded vendor-mini-card">
+                            <div class="vendor-mini-logo rounded-circle overflow-hidden me-3"
+                                 style="width:48px;height:48px;">
+                                <img src="{{ $vendorLogo }}"
+                                     alt="{{ $vendorName }}"
+                                     class="w-100 h-100"
+                                     style="object-fit:cover;">
+                            </div>
+                            <div class="vendor-mini-text">
+                                <div class="small text-muted mb-1">
+                                    {{-- Puedes pasarlo a traducción si quieres --}}
+                                    Proveedor
+                                </div>
+                                <div class="fw-semibold">
+                                    {{ $vendorName }}
+                                </div>
+                                <div class="small text-primary">
+                                    Ver página del proveedor →
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+    
             </div>
         </div>
     </div>

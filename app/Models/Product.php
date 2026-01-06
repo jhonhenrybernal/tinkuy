@@ -113,4 +113,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Customer::class, 'wishlists');
     }
+
+     public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
 }
