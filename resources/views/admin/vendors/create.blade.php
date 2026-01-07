@@ -1072,10 +1072,11 @@ function updateTermsPreview() {
         // Interceptar envío si NO está marcado el checkbox
         if (form && termsCheckbox) {
             form.addEventListener('submit', function (e) {
-                // Si ya están aceptados, no hacemos nada especial
                 if (termsCheckbox.checked) {
+                    // ya aceptó, dejamos continuar
                     return;
                 }
+                // bloqueamos envío y abrimos el modal correspondiente
                 e.preventDefault();
                 openTermsModal();
             });
@@ -1098,7 +1099,7 @@ function updateTermsPreview() {
                 }
 
                 // 3) NO enviamos el formulario automáticamente.
-                //    El usuario debe pulsar Guardar / Registrar.
+                //    El usuario luego pulsa Guardar / Registrar.
             });
         });
     }
@@ -1136,20 +1137,26 @@ function updateTermsPreview() {
             });
         }
 
-        if (form) {
+          if (form && termsCheckbox) {
             form.addEventListener('submit', function (e) {
-                const okPassword = validatePasswordOnSubmit(form);
-                if (!okPassword) {
-                    e.preventDefault();
-                    return;
-                }
+                // Si ya está marcado, dejamos pasar
+                if (termsCheckbox.checked) return;
 
-                if (!termsCheckbox || termsCheckbox.checked) {
-                    return; // ya aceptó
-                }
-
+                // Si NO está marcado, bloqueamos envío y mostramos modal
                 e.preventDefault();
-                openTermsModal();
+                showTermsModal();
+            });
+        }
+
+        if (btnAccept && form && termsCheckbox) {
+            btnAccept.addEventListener('click', function () {
+                termsCheckbox.checked = true;
+
+                const modalEl = document.getElementById('termsModal');
+                if (modalEl) {
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+                }
             });
         }
 
@@ -1167,6 +1174,7 @@ function updateTermsPreview() {
                 // El usuario debe pulsar "Registrar" después de aceptar.
             });
         }
+        setupTermsLogic(); 
     });
 </script>
 @endsection

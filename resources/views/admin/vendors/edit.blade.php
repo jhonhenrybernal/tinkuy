@@ -878,10 +878,11 @@
             // Interceptar envío si NO está marcado el checkbox
             if (form && termsCheckbox) {
                 form.addEventListener('submit', function (e) {
-                    // Si ya están aceptados, no hacemos nada especial
                     if (termsCheckbox.checked) {
+                        // ya aceptó, dejamos continuar
                         return;
                     }
+                    // bloqueamos envío y abrimos el modal correspondiente
                     e.preventDefault();
                     openTermsModal();
                 });
@@ -904,12 +905,61 @@
                     }
 
                     // 3) NO enviamos el formulario automáticamente.
-                    //    El usuario debe pulsar Guardar / Registrar.
+                    //    El usuario luego pulsa Guardar / Registrar.
                 });
             });
         }
 
+     function validatePasswordOnSubmit(form) {
+        const mode = form.dataset.mode || 'create'; // create | edit
+        const passwordInput  = document.getElementById('password');
+        const confirmInput   = document.getElementById('password_confirmation');
+        const errorLabel     = document.getElementById('password-error-js');
 
+        if (!passwordInput || !confirmInput || !errorLabel) {
+            return true;
+        }
+
+        const password = (passwordInput.value || '').trim();
+        const confirm  = (confirmInput.value || '').trim();
+        const isCreate = mode === 'create';
+
+        let errors = [];
+
+        if (isCreate && password.length === 0) {
+            errors.push('La contraseña es obligatoria.');
+        }
+
+        if (!isCreate && password.length === 0 && confirm.length === 0) {
+            clearPasswordError();
+            return true;
+        }
+
+        if (password.length > 0 && password.length < 8) {
+            errors.push('Debe tener al menos 8 caracteres.');
+        }
+
+        if (password.length > 0 && !/[^\w]/.test(password)) {
+            errors.push('Debe incluir al menos un símbolo (ej: ! @ # $ % &).');
+        }
+
+        if (password.length > 0 && password !== confirm) {
+            errors.push('La confirmación de contraseña no coincide.');
+        }
+
+        if (errors.length > 0) {
+            passwordInput.classList.add('is-invalid');
+            confirmInput.classList.add('is-invalid');
+
+            errorLabel.style.display = 'block';
+            errorLabel.innerHTML = errors.join('<br>');
+
+            return false;
+        }
+
+        clearPasswordError();
+        return true;
+    }    
     document.addEventListener('DOMContentLoaded', function () {
         // ... aquí ya tienes otras inicializaciones (vendorType, billing, etc.)
 
@@ -921,18 +971,24 @@
         if (btnShowTerms) {
             btnShowTerms.addEventListener('click', function (e) {
                 e.preventDefault();
-                showTermsModal();
+                openTermsModal();
             });
         }
 
-        if (form && termsCheckbox) {
+       if (form) {
             form.addEventListener('submit', function (e) {
-                // Si ya está marcado, dejamos pasar
-                if (termsCheckbox.checked) return;
+                const okPassword = validatePasswordOnSubmit(form);
+                if (!okPassword) {
+                    e.preventDefault();
+                    return;
+                }
 
-                // Si NO está marcado, bloqueamos envío y mostramos modal
+                if (!termsCheckbox || termsCheckbox.checked) {
+                    return; // ya aceptó
+                }
+
                 e.preventDefault();
-                showTermsModal();
+                openTermsModal();
             });
         }
 
@@ -945,8 +1001,12 @@
                     const modal = bootstrap.Modal.getInstance(modalEl);
                     if (modal) modal.hide();
                 }
+
+                // En create NO enviamos el formulario automáticamente.
+                // El usuario debe pulsar "Registrar" después de aceptar.
             });
         }
+        setupTermsLogic(); 
     });
 </script>
 @endsection
