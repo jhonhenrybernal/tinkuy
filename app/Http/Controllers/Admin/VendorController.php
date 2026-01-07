@@ -40,8 +40,39 @@ class VendorController extends Controller
             // campos simples para “parametrizar” company_media
             'banners.*'          => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'company_images.*'   => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-        ]);
+            'vendor_type' => ['required', 'in:informal,natural,juridica'],
+            'brand_name'  => ['nullable', 'string', 'max:255'],
 
+            'personal_document_type'   => ['nullable', 'string', 'max:10'],
+            'personal_document_number' => ['nullable', 'string', 'max:50'],
+            'city'                     => ['nullable', 'string', 'max:100'],
+
+            'company_name'  => ['nullable', 'string', 'max:255'],
+            'company_nit'   => ['nullable', 'string', 'max:50'],
+            'company_nit_dv'=> ['nullable', 'string', 'max:10'],
+
+            'legal_representative_name'            => ['nullable', 'string', 'max:255'],
+            'legal_representative_document_type'   => ['nullable', 'string', 'max:10'],
+            'legal_representative_document_number' => ['nullable', 'string', 'max:50'],
+
+            'legal_rut'     => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
+            'legal_chamber' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
+
+            'billing_provider' => ['required', 'in:internal,sigo,alegra,other'],
+            'billing_user'     => ['nullable', 'string', 'max:255'],
+            'billing_notes'    => ['nullable', 'string'],
+
+            'terms_accepted'   => ['accepted'], // checkbox
+        ]);
+        if ($request->hasFile('legal_rut')) {
+            $data['legal_rut'] = $request->file('legal_rut')
+                ->store('vendors/legal_rut', 'public');
+        }
+
+        if ($request->hasFile('legal_chamber')) {
+            $data['legal_chamber'] = $request->file('legal_chamber')
+                ->store('vendors/legal_chamber', 'public');
+        }
         // Logo
         $profileImagePath = null;
         if ($request->hasFile('profile_image')) {
@@ -76,7 +107,22 @@ class VendorController extends Controller
             'profile_image' => $profileImagePath,
             'description'   => $validated['description'] ?? null,
             'page_type'     => $validated['page_type'],
-            'company_media' => $companyMedia,   // 👈 se guarda JSON
+            'company_media' => $companyMedia,  
+            'vendor_type'                        => $validated['vendor_type'],
+            'brand_name'                         => $validated['brand_name'] ?? null,
+            'personal_document_type'             => $validated['personal_document_type'] ?? null,
+            'personal_document_number'           => $validated['personal_document_number'] ?? null,
+            'city'                               => $validated['city'] ?? null,
+            'company_name'                       => $validated['company_name'] ?? null,
+            'company_nit'                        => $validated['company_nit'] ?? null,
+            'company_nit_dv'                     => $validated['company_nit_dv'] ?? null,
+            'legal_representative_name'          => $validated['legal_representative_name'] ?? null,
+            'legal_representative_document_type' => $validated['legal_representative_document_type'] ?? null,
+            'legal_representative_document_number' => $validated['legal_representative_document_number'] ?? null,
+            'billing_provider'                   => $validated['billing_provider'],
+            'billing_user'                       => $validated['billing_user'] ?? null,
+            'billing_notes'                      => $validated['billing_notes'] ?? null,
+            'terms_accepted'                     => (bool) ($validated['terms_accepted'] ?? false),
         ]);
 
 
@@ -108,6 +154,29 @@ class VendorController extends Controller
 
             'banners.*'          => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'company_images.*'   => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'vendor_type' => ['required', 'in:informal,natural,juridica'],
+            'brand_name'  => ['nullable', 'string', 'max:255'],
+
+            'personal_document_type'   => ['nullable', 'string', 'max:10'],
+            'personal_document_number' => ['nullable', 'string', 'max:50'],
+            'city'                     => ['nullable', 'string', 'max:100'],
+
+            'company_name'  => ['nullable', 'string', 'max:255'],
+            'company_nit'   => ['nullable', 'string', 'max:50'],
+            'company_nit_dv'=> ['nullable', 'string', 'max:10'],
+
+            'legal_representative_name'            => ['nullable', 'string', 'max:255'],
+            'legal_representative_document_type'   => ['nullable', 'string', 'max:10'],
+            'legal_representative_document_number' => ['nullable', 'string', 'max:50'],
+
+            'legal_rut'     => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
+            'legal_chamber' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
+
+            'billing_provider' => ['required', 'in:internal,sigo,alegra,other'],
+            'billing_user'     => ['nullable', 'string', 'max:255'],
+            'billing_notes'    => ['nullable', 'string'],
+
+            'terms_accepted'   => ['accepted'], // checkbox
         ]);
 
         $data = [
@@ -117,19 +186,43 @@ class VendorController extends Controller
             'status'      => $validated['status'],
             'description' => $validated['description'] ?? null,
             'page_type'   => $validated['page_type'],
+            'vendor_type'                        => $validated['vendor_type'],
+            'brand_name'                         => $validated['brand_name'] ?? null,
+            'personal_document_type'             => $validated['personal_document_type'] ?? null,
+            'personal_document_number'           => $validated['personal_document_number'] ?? null,
+            'city'                               => $validated['city'] ?? null,
+            'company_name'                       => $validated['company_name'] ?? null,
+            'company_nit'                        => $validated['company_nit'] ?? null,
+            'company_nit_dv'                     => $validated['company_nit_dv'] ?? null,
+            'legal_representative_name'          => $validated['legal_representative_name'] ?? null,
+            'legal_representative_document_type' => $validated['legal_representative_document_type'] ?? null,
+            'legal_representative_document_number' => $validated['legal_representative_document_number'] ?? null,
+            'billing_provider'                   => $validated['billing_provider'],
+            'billing_user'                       => $validated['billing_user'] ?? null,
+            'billing_notes'                      => $validated['billing_notes'] ?? null,
+            'terms_accepted'                     => (bool) ($validated['terms_accepted'] ?? false),
         ];
-
+        
         if (!empty($validated['password'])) {
             $data['password'] = Hash::make($validated['password']);
         }
+        if ($request->hasFile('legal_rut')) {
+            $data['legal_rut'] = $request->file('legal_rut')
+                ->store('vendors/legal_rut', 'public');
+        }
 
+        if ($request->hasFile('legal_chamber')) {
+            $data['legal_chamber'] = $request->file('legal_chamber')
+                ->store('vendors/legal_chamber', 'public');
+        }
         if ($request->hasFile('profile_image')) {
             if ($vendor->profile_image) {
                 Storage::disk('public')->delete($vendor->profile_image);
             }
             $data['profile_image'] = $request->file('profile_image')->store('vendors', 'public');
         }
-
+        $companyMedia  = $vendor->company_media ?? [];   // base actual
+        $mediaModified = false;
         if ($request->filled('banners_paths')) {
             $companyMedia['banners'] = collect($request->input('banners_paths', []))
                 ->filter()
@@ -146,7 +239,9 @@ class VendorController extends Controller
                 ->all();
         }
 
-        $data['company_media'] = $companyMedia;
+        if ($mediaModified) {
+            $data['company_media'] = $companyMedia;
+        }
 
 
         $vendor->update($data);
@@ -163,7 +258,7 @@ class VendorController extends Controller
     {
         // vendor_id viene en query: ?vendor_id=123
         $vendorId = $request->get('vendor_id');
-        $vendor   = $vendorId ? Vendor::find($vendorId) : null;
+        $vendor   = Vendor::findOrFail($vendorId);
 
         // Escogemos la vista según el tipo de landing
         $view = match ($pageType) {
@@ -209,14 +304,13 @@ class VendorController extends Controller
 
 
         // Productos demo (luego se pueden cambiar por productos reales)
-        $products = $vendor->products()   // ajusta al nombre de la relación real
-        // ->where('is_featured', 1)  ⛔ NO
-        ->where('status', 'active')   // opcional, si tienes campo de estado
-        ->with(['translation', 'primaryImage', 'primaryVariant']) // ajusta a tus relaciones
+       $products = $vendor->products()
+        ->where('status', 1)                    // o 'active' según tu modelo
+        ->with(['translation', 'images', 'primaryVariant'])
         ->orderByDesc('created_at')
-        ->take(12)                    // límite razonable para la landing
+        ->take(12)
         ->get();
-
+           
         return view($view, [
             'companyName'   => $companyName,
             'logoUrl'       => $logoUrl,

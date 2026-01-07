@@ -17,17 +17,38 @@ class Vendor extends Authenticatable
         'password',
         'phone',
         'status',
-        'profile_image',   // logo
+        'profile_image',
         'description',
         'page_type',
-        'company_media',   // NUEVO
+        'company_media',
+
+        // nuevos:
+        'vendor_type',
+        'brand_name',
+        'personal_document_type',
+        'personal_document_number',
+        'city',
+        'company_name',
+        'company_nit',
+        'company_nit_dv',
+        'legal_representative_name',
+        'legal_representative_document_type',
+        'legal_representative_document_number',
+        'legal_rut',
+        'legal_chamber',
+        'billing_provider',
+        'billing_user',
+        'billing_notes',
+        'terms_accepted',
     ];
+
 
     protected $hidden = ['password'];
 
     protected $casts = [
         'password'      => 'hashed',
         'company_media' => 'array',  // NUEVO: JSON → array
+        'terms_accepted' => 'boolean',
     ];
 
     /**

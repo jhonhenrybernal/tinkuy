@@ -1,7 +1,7 @@
 {
-    "name": "devquick/qhatu",
+    "name": "devquick/tinkuy",
     "type": "project",
-    "description": "Quatu – Plataforma de Comercio Electrónico para Productos Industriales en Colombia",
+    "description": "Tinkuy – Plataforma de Comercio Electrónico para Productos Industriales en Colombia",
     "keywords": ["laravel", "ecommerce", "boilerplate", "multi-vendor", "multilingual"],
     "license": "MIT",
     "require": {
