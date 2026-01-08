@@ -12,16 +12,20 @@ class VendorLeadWelcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public Vendor $vendor;
-
-    public function __construct(Vendor $vendor)
-    {
-        $this->vendor = $vendor;
-    }
+   
+    public function __construct(
+        public Vendor $vendor,
+        public ?string $landingUrl = null
+    ) {}
 
     public function build()
     {
-        return $this->subject('¡Gracias por tu interés en vender con nosotros!')
-            ->markdown('emails.vendors.lead_welcome');
+        return $this
+            ->subject('¡Gracias por tu interés en vender con nosotros!')
+            ->markdown('emails.vendors.lead_welcome')
+            ->with([
+                'vendor' => $this->vendor,
+                'landingUrl' => $this->landingUrl ?? url('/vender'), // ajusta tu ruta
+            ]);
     }
 }

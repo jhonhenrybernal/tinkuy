@@ -26,6 +26,7 @@
                         <th>{{ __('cms.vendors.email') }}</th>
                         <th>{{ __('cms.vendors.phone') }}</th>
                         <th>{{ __('cms.vendors.status') }}</th>
+                        <th>{{ __('cms.vendors.prospect') }}</th>
                         <th>{{ __('cms.vendors.actions') }}</th>
                     </tr>
                 </thead>
@@ -100,6 +101,15 @@
                             return data === 'active'
                                 ? '<span class="badge bg-success">{{ __('cms.vendors.active') }}</span>'
                                 : '<span class="badge bg-danger">{{ __('cms.vendors.inactive') }}</span>';
+                        }
+                    },
+                    {
+                        data: 'is_prospect',
+                        name: 'is_prospect',
+                        render: function(data) {
+                            return data === true
+                                ? '<span class="badge bg-success">{{ __('cms.vendors.yes') }}</span>'
+                                : '<span class="badge bg-danger">{{ __('cms.vendors.not') }}</span>';
                         }
                     },
                     {

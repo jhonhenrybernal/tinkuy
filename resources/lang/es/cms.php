@@ -336,6 +336,7 @@ return [
         'phone'      => 'Teléfono',
         'status'     => 'Estado',
         'actions'    => 'Acciones',
+        'prospect'    => 'Prospect',
 
         // Formularios (crear / editar)
         'register_new_vendor' => 'Registrar nuevo proveedor',
@@ -355,6 +356,8 @@ return [
         'page_type_landing_3'=> 'Plantilla 3 – Minimal / branding',
 
         'active'   => 'Activo',
+        'yes'   => 'Si',
+        'not'   => 'No',
         'inactive' => 'Inactivo',
         'banned'   => 'Bloqueado',
 

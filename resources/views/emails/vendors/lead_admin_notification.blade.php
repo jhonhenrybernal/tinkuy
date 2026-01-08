@@ -1,36 +1,36 @@
 @component('mail::message')
 # Nuevo prospecto de proveedor
 
-Se ha registrado una nueva persona interesada en vender en la plataforma.
+Se registró un nuevo prospecto desde el landing de proveedores.
 
 @component('mail::panel')
-**Nombre:** {{ $lead->full_name }}  
-**Correo:** {{ $lead->email }}  
-**Teléfono:** {{ $lead->phone ?: 'No especificado' }}  
-**Ciudad:** {{ $lead->city ?: 'No especificada' }}  
-
-**Marca / negocio:** {{ $lead->brand_name ?: 'No especificado' }}  
-**Tipo de proveedor:** {{ ucfirst($lead->vendor_type) }}  
-**Tipo de negocio:** {{ $lead->business_type ?: 'No especificado' }}  
-
-**Redes / web:** {{ $lead->social ?: 'No especificado' }}
-@endcomponent
-
-**Descripción / qué vende:**
-
-@if($lead->about)
-> {{ $lead->about }}
-@else
-_No se registró descripción._
+**Datos del prospecto**  
+- **Nombre:** {{ $vendor->name }}  
+- **Correo:** {{ $vendor->email }}  
+@if(!empty($vendor->phone))
+- **Teléfono / WhatsApp:** {{ $vendor->phone }}
 @endif
-
-@component('mail::button', ['url' => url('/admin/vendors')])
-Ver proveedores en el panel
+@if(!empty($vendor->city))
+- **Ciudad:** {{ $vendor->city }}
+@endif
+@if(!empty($vendor->brand_name))
+- **Marca / negocio:** {{ $vendor->brand_name }}
+@endif
+@if(!empty($vendor->vendor_type))
+- **Tipo de proveedor:** {{ ucfirst($vendor->vendor_type) }}
+@endif
+@if(!empty($vendor->description))
+- **¿Qué vende?:** {{ $vendor->description }}
+@endif
 @endcomponent
 
-Este proveedor se ha creado como:  
-**Vendor #{{ $vendor->id }} (is_prospect = true)**.
+@component('mail::button', ['url' => $adminVendorUrl ?? url('/')])
+Ver en panel de administración
+@endcomponent
 
-Saludos,  
-{{ config('app.name') }}
+@component('mail::button', ['url' => $landingUrl ?? url('/')])
+Ir al landing de proveedores
+@endcomponent
+
+**Recuerda:** Este registro está marcado como *prospecto* y debe completarse antes de aprobarlo como proveedor.
 @endcomponent

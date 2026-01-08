@@ -324,8 +324,8 @@ class VendorController extends Controller
 
     public function getVendorData()
     {
-        $vendors = Vendor::select(['id', 'name', 'email', 'phone', 'status']);
-
+        $vendors = Vendor::select(['id', 'name', 'email', 'phone', 'status','is_prospect']);
+        
         return DataTables::of($vendors)
             ->addColumn('action', function ($vendor) {
                 // AQUÍ está el problema:

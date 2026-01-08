@@ -335,6 +335,7 @@ return [
         'phone'      => 'Phone',
         'status'     => 'Status',
         'actions'    => 'Actions',
+        'prospect'    => 'Prospecto',
 
         // Formularios (crear / editar)
         'register_new_vendor' => 'Register New Vendor',
@@ -356,6 +357,8 @@ return [
         'active'   => 'Active',
         'inactive' => 'Inactive',
         'banned'   => 'Banned',
+        'yes'   => 'Yes',
+        'not'   => 'Not',
 
         'register_button' => 'Register Vendor',
         'save_changes'    => 'Save Changes',

@@ -19,6 +19,7 @@ use App\Repositories\Admin\SocialMediaLink\SocialMediaLinkRepositoryInterface;
 use App\Services\Admin\ImageService;
 use App\Services\Admin\MenuService;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -56,5 +57,13 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void {}
+    public function boot(): void
+    {
+        // ✅ Asegura que exista el namespace mail:: (Markdown Mail)
+        $path = resource_path('views/vendor/mail');
+
+        if (is_dir($path)) {
+            View::addNamespace('mail', $path);
+        }
+    }
 }

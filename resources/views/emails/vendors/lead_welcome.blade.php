@@ -1,31 +1,35 @@
 @component('mail::message')
-# ¡Hola {{ $vendor->name }}!
+# ¡Gracias por tu interés en vender con nosotros!
 
-Gracias por registrarte como **posible proveedor** en nuestra plataforma.
+Hola **{{ $vendor->name }}**,  
 
-Hemos recibido tu información y en los próximos días nuestro equipo revisará tu solicitud
-para confirmar que tu negocio encaje con lo que ofrecemos.
+Gracias por confiar en **{{ config('app.name') }}**. Hemos recibido tu solicitud para convertirte en proveedor y nuestro equipo la revisará.  
+En breve nos pondremos en contacto contigo para continuar con el proceso.
 
 @component('mail::panel')
-**Resumen de tu registro**
-
-- Marca / negocio: **{{ $lead->brand_name ?: 'No especificado' }}**
-- Tipo de proveedor: **{{ ucfirst($lead->vendor_type) }}**
-- Ciudad: **{{ $lead->city ?: 'No especificada' }}**
-- Tipo de negocio: **{{ $lead->business_type ?: 'No especificado' }}**
+**Resumen de tu solicitud**  
+- **Nombre:** {{ $vendor->name }}  
+- **Correo:** {{ $vendor->email }}  
+@if(!empty($vendor->phone))
+- **Teléfono / WhatsApp:** {{ $vendor->phone }}
+@endif
+@if(!empty($vendor->city))
+- **Ciudad:** {{ $vendor->city }}
+@endif
+@if(!empty($vendor->brand_name))
+- **Marca / negocio:** {{ $vendor->brand_name }}
+@endif
+@if(!empty($vendor->vendor_type))
+- **Tipo de proveedor:** {{ ucfirst($vendor->vendor_type) }}
+@endif
 @endcomponent
 
-Mientras tanto, puedes ir preparando:
+@component('mail::button', ['url' => $landingUrl ?? url('/')])
+Ver información para proveedores
+@endcomponent
 
-- Logo de tu marca en buena calidad.  
-- Algunas fotos de tus productos o servicios.  
-- Información básica de precios y catálogo.
-
-Cuando tu solicitud sea aprobada, te contactaremos por correo (o teléfono si lo proporcionaste)
-para ayudarte a configurar tu tienda y completar el registro oficial.
-
-Si tú no realizaste este registro, puedes ignorar este correo.
+Si tienes dudas, responde este correo y con gusto te ayudamos.
 
 Saludos,  
-**El equipo de {{ config('app.name') }}**
+**Equipo {{ config('app.name') }}**
 @endcomponent
