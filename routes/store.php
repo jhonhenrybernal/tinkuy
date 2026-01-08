@@ -17,10 +17,11 @@ use App\Http\Controllers\Store\SearchController;
 use App\Http\Controllers\Store\ShopController;
 use App\Http\Controllers\Store\WishlistController;
 use App\Http\Controllers\StoreController;
-use App\Http\Controllers\VendorTemplateController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StoreController::class, 'index'])->name('xylo.home');
+Route::get('/home', [StoreController::class, 'index'])->name('xylo.home');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 Route::post('/change-currency', [CurrencyController::class, 'changeCurrency'])->name('change.currency');
 
@@ -81,5 +82,11 @@ Route::prefix('customer')->name('customer.')->group(function () {
 
 Route::get('/stripe/checkout', [StripeController::class, 'checkout'])->name('stripe.checkout.process');
 
-Route::get('/vendors/company/{id}', [VendorTemplateController::class, 'templateCompany'])
+Route::get('/vendors/company/{id}', [VendorController::class, 'templateCompany'])
         ->name('vendors.company-preview');
+
+Route::get('/quiero-vender', [VendorController::class, 'wantSell'])
+        ->name('vendors.want-sell');
+
+Route::post('/vendors/lead/store', [VendorController::class, 'storeLead'])
+    ->name('vendors.lead.store');
