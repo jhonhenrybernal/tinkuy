@@ -649,6 +649,31 @@
                     </button>
                 </label>
             </div>
+            <hr class="my-4">
+
+            <div class="card mb-4" id="admin-validation-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>Validación administrativo</strong>
+
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-admin-validation">
+                        Agregar nueva validación
+                    </button>
+                </div>
+
+                <div class="card-body">
+                    <p class="text-muted small mb-3">
+                        Registra observaciones por campo para el proceso de revisión.
+                    </p>
+
+                    <div id="admin-validations-list" class="d-flex flex-column gap-2"></div>
+
+                    {{-- Aquí se guarda el JSON final --}}
+                    <input type="hidden"
+                        name="admin_validations"
+                        id="admin_validations"
+                        value="{{ old('admin_validations', isset($vendor) ? (is_array($vendor->admin_validations) ? json_encode($vendor->admin_validations) : $vendor->admin_validations) : '[]') }}">
+                </div>
+            </div>
 
             {{-- BOTONES --}}
             <div class="mt-4 d-flex gap-2">
@@ -1008,6 +1033,297 @@
         }
         setupTermsLogic(); 
     });
+    (function () {
+        // -------------------------
+        // CATALOG desde BD
+        // -------------------------
+        let CATALOG = {
+            fields: [],
+            reasons: []
+        };
+
+        async function loadCatalog(vendorType) {
+            const url = "{{ route('admin.validation.catalog') }}" + "?vendor_type=" + encodeURIComponent(vendorType || 'informal');
+            const resp = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            const data = await resp.json();
+
+            if (!resp.ok || !data.success) {
+                throw new Error(data.message || 'No se pudo cargar catálogo de validación');
+            }
+
+            // Normalizamos a {value,label}
+            CATALOG.fields  = (data.fields  || []).map(f => ({ value: f.key,   label: f.label }));
+            CATALOG.reasons = (data.reasons || []).map(r => ({ value: r.value, label: r.label }));
+        }
+
+        function getVendorType() {
+            const checked = document.querySelector('input[name="vendor_type"]:checked');
+            return checked ? checked.value : 'informal';
+        }
+
+        // -------------------------
+        // DOM refs
+        // -------------------------
+        const listEl   = document.getElementById('admin-validations-list');
+        const hiddenEl = document.getElementById('admin_validations');
+        const addBtn   = document.getElementById('btn-add-admin-validation');
+
+        if (!listEl || !hiddenEl || !addBtn) return;
+
+        // -------------------------
+        // Helpers JSON
+        // -------------------------
+        function safeParseJson(str, fallback) {
+            try { return JSON.parse(str); } catch (e) { return fallback; }
+        }
+
+        function readState() {
+            const raw = hiddenEl.value || '[]';
+            const parsed = safeParseJson(raw, []);
+            return Array.isArray(parsed) ? parsed : [];
+        }
+
+        function writeState(items) {
+            hiddenEl.value = JSON.stringify(items || []);
+        }
+
+        function moveOtherToEnd(options) {
+            const normal = options.filter(o => o.value !== 'other');
+            const other  = options.find(o => o.value === 'other');
+            return other ? [...normal, other] : normal;
+        }
+
+        function buildOptions(options, selectedValue) {
+            return (options || []).map(opt => {
+                const sel = (opt.value === selectedValue) ? 'selected' : '';
+                return `<option value="${opt.value}" ${sel}>${opt.label}</option>`;
+            }).join('');
+        }
+
+        function escapeHtml(str) {
+            return (str || '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        // -------------------------
+        // Render
+        // -------------------------
+        function render() {
+            const items = readState();
+
+            const fieldOptions  = CATALOG.fields;   // ✅ viene de BD
+            const reasonOptions = CATALOG.reasons;  // ✅ viene de BD
+
+            listEl.innerHTML = items.map((item, idx) => {
+                const field  = item.field || '';
+                const reason = item.reason || '';
+                const custom = item.custom_reason || '';
+
+                return `
+                    <div class="border rounded p-2" data-index="${idx}">
+                        <div class="row g-2 align-items-end">
+
+                            <div class="col-md-5">
+                                <label class="form-label small mb-1">Campo</label>
+                                <select class="form-select form-select-sm js-av-field">
+                                    <option value="">Selecciona un campo…</option>
+                                    ${buildOptions(fieldOptions, field)}
+                                </select>
+                            </div>
+
+                            <div class="col-md-5">
+                                <label class="form-label small mb-1">Motivo</label>
+                                <select class="form-select form-select-sm js-av-reason">
+                                    <option value="">Selecciona un motivo…</option>
+                                    ${buildOptions(moveOtherToEnd(CATALOG.reasons.length ? CATALOG.reasons : REASONS), reason)}
+                                </select>
+                            </div>
+
+                            <div class="col-md-2 d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-outline-danger js-av-remove">
+                                    Eliminar
+                                </button>
+                            </div>
+
+                            <div class="col-12 js-av-custom-wrap ${reason === 'other' ? '' : 'd-none'}">
+                                <label class="form-label small mb-1">Especificar</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="text"
+                                        class="form-control js-av-custom"
+                                        value="${escapeHtml(custom)}"
+                                        placeholder="Escribe el motivo...">
+                                    <button type="button"
+                                            class="btn btn-outline-success js-av-custom-add"
+                                            title="Agregar motivo">
+                                        ✓
+                                    </button>
+                                </div>
+                                <div class="small text-muted mt-1">
+                                    Al agregar, se guardará y aparecerá en la lista de motivos.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addRow() {
+            const items = readState();
+            items.push({ field: '', reason: '', custom_reason: null });
+            writeState(items);
+            render();
+        }
+
+        function removeRow(index) {
+            const items = readState();
+            items.splice(index, 1);
+            writeState(items);
+            render();
+        }
+
+        function updateRow(index, patch) {
+            const items = readState();
+            items[index] = { ...(items[index] || {}), ...patch };
+            writeState(items);
+        }
+
+        // -------------------------
+        // Crear motivo en BD
+        // -------------------------
+        async function createReason(label) {
+            const resp = await fetch("{{ route('admin.validation.reasons.store') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({ label })
+            });
+
+            const data = await resp.json();
+            if (!resp.ok || !data.success) {
+                throw new Error(data.message || 'No se pudo crear el motivo.');
+            }
+            return data.reason; // {id,value,label}
+        }
+
+        // -------------------------
+        // Events
+        // -------------------------
+        addBtn.addEventListener('click', addRow);
+
+        listEl.addEventListener('change', function (e) {
+            const row = e.target.closest('[data-index]');
+            if (!row) return;
+
+            const idx = Number(row.getAttribute('data-index'));
+            if (Number.isNaN(idx)) return;
+
+            if (e.target.classList.contains('js-av-field')) {
+                updateRow(idx, { field: e.target.value });
+            }
+
+            if (e.target.classList.contains('js-av-reason')) {
+                const val = e.target.value;
+                updateRow(idx, { reason: val, custom_reason: val === 'other' ? '' : null });
+                render(); // muestra/oculta custom
+            }
+        });
+
+        listEl.addEventListener('input', function (e) {
+            const row = e.target.closest('[data-index]');
+            if (!row) return;
+
+            const idx = Number(row.getAttribute('data-index'));
+            if (Number.isNaN(idx)) return;
+
+            if (e.target.classList.contains('js-av-custom')) {
+                updateRow(idx, { custom_reason: e.target.value });
+            }
+        });
+
+        listEl.addEventListener('click', async function (e) {
+            // eliminar
+            if (e.target.classList.contains('js-av-remove')) {
+                const row = e.target.closest('[data-index]');
+                if (!row) return;
+                const idx = Number(row.getAttribute('data-index'));
+                if (!Number.isNaN(idx)) removeRow(idx);
+                return;
+            }
+
+            // agregar motivo nuevo desde "Especificar"
+            if (e.target.classList.contains('js-av-custom-add')) {
+                const row = e.target.closest('[data-index]');
+                if (!row) return;
+
+                const idx = Number(row.getAttribute('data-index'));
+                if (Number.isNaN(idx)) return;
+
+                const input = row.querySelector('.js-av-custom');
+                const label = (input?.value || '').trim();
+
+                if (!label) {
+                    alert('Escribe el motivo antes de agregar.');
+                    return;
+                }
+
+                e.target.disabled = true;
+
+                try {
+                    const reason = await createReason(label);
+
+                    // Recargar catálogo para que aparezca globalmente en todas las filas
+                    await loadCatalog(getVendorType());
+
+                    // Actualizar fila: selecciona nuevo motivo
+                    updateRow(idx, { reason: reason.value, custom_reason: null });
+
+                    render();
+                } catch (err) {
+                    console.error(err);
+                    alert(err.message || 'Error agregando motivo.');
+                    e.target.disabled = false;
+                }
+            }
+        });
+
+        // Si cambia vendor_type => recargar catálogo y render
+        document.querySelectorAll('input[name="vendor_type"]').forEach(r => {
+            r.addEventListener('change', async function () {
+                try {
+                    await loadCatalog(getVendorType());
+                    render();
+                } catch (e) {
+                    console.error(e);
+                    alert('No se pudo cargar el catálogo de validación.');
+                }
+            });
+        });
+
+        // -------------------------
+        // Init
+        // -------------------------
+        (async function init() {
+            if (!hiddenEl.value) writeState([]); // normalizar
+
+            try {
+                await loadCatalog(getVendorType());
+                render();
+            } catch (e) {
+                console.error(e);
+                alert('No se pudo cargar el catálogo de validación.');
+            }
+        })();
+
+    })();
 </script>
 @endsection
 

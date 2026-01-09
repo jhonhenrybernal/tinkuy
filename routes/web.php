@@ -130,6 +130,14 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::post('vendors/resize-media', [VendorController::class, 'resizeMedia'])
     ->name('vendors.resize-media');
 
+    Route::get('validation/catalog', [VendorController::class, 'adminValidationCatalog'])
+        ->name('validation.catalog');
+
+    Route::post('validation/reasons', [VendorController::class, 'adminValidationReasonStore'])
+        ->name('validation.reasons.store');
+
+    Route::put('validation/reasons/{id}', [VendorController::class, 'adminValidationReasonUpdate'])
+        ->name('validation.reasons.update');
 
     /* Pages */
     Route::resource('pages', PageController::class);

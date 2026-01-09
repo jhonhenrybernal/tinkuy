@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             PaymentGatewaySeeder::class,
             PaymentSeeder::class,
             RefundSeeder::class,
+            AdminValidationReasonsSeeder::class,
+            AdminValidationFieldsSeeder::class,
         ]);
     }
 }

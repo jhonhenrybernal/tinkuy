@@ -11,6 +11,13 @@ use Illuminate\Validation\Rules\Password;
 use Yajra\DataTables\Facades\DataTables;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use App\Models\AdminValidationField;
+use App\Models\AdminValidationReason;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use App\Mail\VendorNotApprovedMail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class VendorController extends Controller
 {
@@ -62,7 +69,7 @@ class VendorController extends Controller
             'billing_user'     => ['nullable', 'string', 'max:255'],
             'billing_notes'    => ['nullable', 'string'],
 
-            'terms_accepted'   => ['accepted'], // checkbox
+            'terms_accepted'   => ['accepted'], // checkbox=
         ]);
         if ($request->hasFile('legal_rut')) {
             $data['legal_rut'] = $request->file('legal_rut')
@@ -98,7 +105,13 @@ class VendorController extends Controller
                 ->all();
         }
 
-        Vendor::create([
+        $adminValidations = [];
+        if ($request->filled('admin_validations')) {
+            $adminValidations['admin_validations'] = $request->input('admin_validations', []);
+        }
+
+        
+        $vendor = Vendor::create([
             'name'          => trim($validated['name']),
             'email'         => strtolower(trim($validated['email'])),
             'password'      => bcrypt($validated['password']),
@@ -123,8 +136,12 @@ class VendorController extends Controller
             'billing_user'                       => $validated['billing_user'] ?? null,
             'billing_notes'                      => $validated['billing_notes'] ?? null,
             'terms_accepted'                     => (bool) ($validated['terms_accepted'] ?? false),
+            'admin_validations'                     => $adminValidations,
+            'approval_updated_by' => auth()->id()
         ]);
-
+        if (!empty($adminValidations)) {
+            $this->sendValidationAdmin($vendor, $adminValidations);
+        }
 
         return redirect()->route('admin.vendors.index')
             ->with('success', 'Proveedor creado correctamente.');
@@ -140,7 +157,6 @@ class VendorController extends Controller
     public function update(Request $request, $id)
     {
         $vendor = Vendor::findOrFail($id);
-
         $validated = $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'email', 'max:255', 'unique:vendors,email,' . $vendor->id],
@@ -201,6 +217,7 @@ class VendorController extends Controller
             'billing_user'                       => $validated['billing_user'] ?? null,
             'billing_notes'                      => $validated['billing_notes'] ?? null,
             'terms_accepted'                     => (bool) ($validated['terms_accepted'] ?? false),
+            
         ];
         
         if (!empty($validated['password'])) {
@@ -239,15 +256,99 @@ class VendorController extends Controller
                 ->all();
         }
 
+        if ($request->filled('admin_validations')) {
+            $data['admin_validations'] = $request->input('admin_validations', []);
+        }
+
         if ($mediaModified) {
             $data['company_media'] = $companyMedia;
         }
 
-
+        $data['approval_updated_by'] = auth()->id();
         $vendor->update($data);
-
+         if ($request->filled('admin_validations')) {
+            $this->sendValidationAdmin($data,$vendor);
+        }
         return redirect()->route('admin.vendors.index')
             ->with('success', 'Proveedor actualizado correctamente.');
+    }
+
+
+     /**
+     * Vista previa de la plantilla de vendor.
+     * Si se pasa vendor_id, usa sus datos; si no, usa demo.
+     */
+    public function sendValidationAdmin($data, $vendor)
+    {
+        // try {
+            // Traemos catálogos para convertir keys->labels
+            $fieldMap = AdminValidationField::query()
+                ->pluck('label', 'key')
+                ->toArray();
+
+        
+            $reasonMap = AdminValidationReason::query()
+                ->pluck('label', 'value')
+                ->toArray();
+
+            // Normalizamos items
+            
+             $fieldMap = AdminValidationField::query()
+                ->pluck('label', 'key')
+                ->toArray();
+
+        
+            $reasonMap = AdminValidationReason::query()
+                ->pluck('label', 'value')
+                ->toArray();
+
+            // Normalizamos items
+           $raw = $data['admin_validations'] ?? '[]';
+
+// Si viene como string JSON (lo normal por ser hidden input)
+if (is_string($raw)) {
+    $raw = json_decode($raw, true);
+}
+
+// Si por alguna razón no decodificó bien, cae a []
+if (!is_array($raw)) {
+    $raw = [];
+}
+
+$items = collect($raw)
+    ->filter(fn($x) => is_array($x) && !empty($x['field']) && !empty($x['reason']))
+    ->map(function ($x) use ($fieldMap, $reasonMap) {
+        $fieldKey    = $x['field'];
+        $reasonVal   = $x['reason'];
+        $fieldLabel  = $fieldMap[$fieldKey] ?? $fieldKey;
+        $reasonLabel = $reasonMap[$reasonVal] ?? $reasonVal;
+
+        if (!empty($x['custom_reason'])) {
+            $reasonLabel = $x['custom_reason'];
+        }
+
+        return [
+            'field_key'    => $fieldKey,
+            'field_label'  => $fieldLabel,
+            'reason_val'   => $reasonVal,
+            'reason_label' => $reasonLabel,
+        ];
+    })
+    ->values()
+    ->all();      // Enviamos correo
+            if (count($items) > 0) {
+                Mail::to($vendor->email)->send(
+                    new VendorNotApprovedMail($vendor, $items)
+                );
+        
+            }
+
+        // } catch (\Throwable $e) {
+        //     Log::error('Error enviando correo de no aprobación', [
+        //         'vendor_id' => $vendor->id ?? null,
+        //         'message' => $e->getMessage(),
+        //     ]);
+        // }
     }
 
     /**
@@ -451,6 +552,102 @@ class VendorController extends Controller
             'items'   => $items,
             'errors'  => $errors,
         ]);
+    }
+
+
+    public function adminValidationCatalog(Request $request)
+    {
+        $vendorType = $request->query('vendor_type', 'informal'); // informal|natural|juridica
+
+        $fields = AdminValidationField::query()
+            ->where('is_active', true)
+            ->where(function ($q) use ($vendorType) {
+                $q->where('applies_to', 'all')
+                ->orWhere('applies_to', $vendorType);
+            })
+            ->orderBy('sort_order')
+            ->orderBy('label')
+            ->get(['id','key','label','applies_to']);
+
+        $reasons = AdminValidationReason::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('label')
+            ->get(['id','value','label']);
+
+        return response()->json([
+            'success' => true,
+            'fields'  => $fields,
+            'reasons' => $reasons,
+        ]);
+    }
+
+    public function adminValidationReasonStore(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'label' => ['required','string','max:120'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Datos inválidos.',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
+        $label = trim($request->input('label'));
+
+        // value único y estable
+        $base = Str::slug($label, '_');
+        $value = $base ?: ('custom_' . Str::random(6));
+
+        // asegurar unicidad
+        $i = 1;
+        while (AdminValidationReason::where('value', $value)->exists()) {
+            $value = $base . '_' . $i;
+            $i++;
+        }
+
+        $reason = AdminValidationReason::create([
+            'value'     => $value,
+            'label'     => $label,
+            'is_active' => true,
+            'is_system' => false,
+            'sort_order'=> 999,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'reason'  => [
+                'id'    => $reason->id,
+                'value' => $reason->value,
+                'label' => $reason->label,
+            ],
+        ]);
+    }
+
+
+
+    public function adminValidationReasonUpdate(Request $request, $id)
+    {
+        $reason = AdminValidationReason::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'label'     => ['required','string','max:120'],
+            'is_active' => ['required','boolean'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $reason->update([
+            'label' => trim($request->label),
+            'is_active' => (bool)$request->is_active,
+        ]);
+
+        return back()->with('success', 'Motivo actualizado.');
     }
 
 }

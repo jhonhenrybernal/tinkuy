@@ -41,6 +41,7 @@ class Vendor extends Authenticatable
         'billing_notes',
         'terms_accepted',
          'is_prospect',
+         'admin_validations',
     ];
 
 
@@ -49,6 +50,7 @@ class Vendor extends Authenticatable
     protected $casts = [
         'password'      => 'hashed',
         'company_media' => 'array',  // NUEVO: JSON → array
+        'admin_validations' => 'array',  // NUEVO: JSON → array
         'terms_accepted' => 'boolean',
          'is_prospect'    => 'boolean', 
     ];
