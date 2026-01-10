@@ -18,6 +18,7 @@ use App\Http\Controllers\Store\ShopController;
 use App\Http\Controllers\Store\WishlistController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StoreController::class, 'index'])->name('xylo.home');
@@ -87,6 +88,9 @@ Route::get('/vendors/company/{id}', [VendorController::class, 'templateCompany']
 
 Route::get('/quiero-vender', [VendorController::class, 'wantSell'])
         ->name('vendors.want-sell');
+
+Route::get('/contact', [ContactController::class, 'index'])
+        ->name('contact.index');
 
 Route::post('/vendors/lead/store', [VendorController::class, 'storeLead'])
     ->name('vendors.lead.store');
