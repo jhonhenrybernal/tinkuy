@@ -5,14 +5,26 @@
         $wishlistCount = 0;
         if (auth('customer')->check()) {
             $wishlistCount = auth('customer')->user()->wishlistProducts()->count();
-        }
+        }$topBarMessages = App\Models\TopBarMessage::currentlyVisible()->get();
     @endphp
 
     <div class="top-bar w-100 bg-light py-1 header-top-bar">
-        <div class="text-center small">
-            {{ __('store.header.top_bar_message') }} 
+        <div class="text-center small topbar-rotator"
+            data-interval="4500">
+
+            @forelse(($topBarMessages ?? collect()) as $i => $msg)
+                <div class="topbar-msg {{ $i === 0 ? 'is-active' : '' }}">
+                    {!! $msg->content_html !!}
+                </div>
+            @empty
+                <div class="topbar-msg is-active">
+                    {{ __('store.header.top_bar_message') }}
+                </div>
+            @endforelse
+
         </div>
-    </div>  
+    </div>
+
 
     <div class="container py-3">
         <!-- Row 2: Logo Left / Search Right -->
@@ -55,7 +67,7 @@
 
             <div class="col-md-4 d-flex justify-content-end align-items-center gap-3">
                 <!-- Language Selector -->
-                <form action="{{ route('change.store.language') }}" method="POST">
+                <!-- <form action="{{ route('change.store.language') }}" method="POST">
                     @csrf
                     <select name="lang" class="form-select form-select-sm font-style" onchange="this.form.submit()">
                         <option value="en" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>EN</option>
@@ -63,7 +75,7 @@
                         <option value="es" {{ app()->getLocale() == 'es' ? 'selected' : '' }}>ES</option>
                         <option value="de" {{ app()->getLocale() == 'de' ? 'selected' : '' }}>DE</option>
                     </select>
-                </form>
+                </form> -->
 
                 <!-- Currency Selector -->
                 <form action="{{ route('change.currency') }}" method="POST">
@@ -139,3 +151,75 @@
         </div>
     </div>
 </header>
+<style>
+    .topbar-rotator {
+        position: relative;
+        min-height: 24px; /* ajusta según tu altura */
+    }
+
+    .topbar-msg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        opacity: 0;
+        transform: translateY(6px);
+        filter: blur(6px);
+        transition: opacity .55s ease, transform .55s ease, filter .55s ease;
+        pointer-events: none;
+    }
+
+    .topbar-msg.is-active {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+        pointer-events: auto;
+    }
+
+    .header-top-bar {
+    overflow: hidden;
+    }
+
+    .topbar-rotator {
+    width: 100%;
+    text-align: center;
+    }
+
+    .topbar-msg {
+        white-space: nowrap;      /* 🔑 clave */
+        word-break: keep-all;     /* evita romper palabras */
+        overflow: hidden;
+        text-overflow: ellipsis;  /* por si es muy largo */
+        display: block;
+    }
+
+    .topbar-msg a,
+    .topbar-msg strong,
+    .topbar-msg span {
+    display: inline;
+    white-space: nowrap;
+    }
+
+    .header-top-bar .text-center {
+    width: 100%;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const rotator = document.querySelector('.topbar-rotator');
+  if (!rotator) return;
+
+  const interval = parseInt(rotator.dataset.interval || '4500', 10);
+  const msgs = Array.from(rotator.querySelectorAll('.topbar-msg'));
+  if (msgs.length <= 1) return;
+
+  let idx = msgs.findIndex(m => m.classList.contains('is-active'));
+  if (idx < 0) idx = 0;
+
+  setInterval(() => {
+    msgs[idx].classList.remove('is-active');
+    idx = (idx + 1) % msgs.length;
+    msgs[idx].classList.add('is-active');
+  }, interval);
+});
+</script>

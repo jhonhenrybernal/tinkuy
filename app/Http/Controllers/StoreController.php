@@ -33,4 +33,12 @@ class StoreController extends Controller
 
         return view('themes.xylo.home', compact('banners', 'categories', 'products'));
     }
+
+    public function privacyPolicy(){
+          return view('themes.xylo.privacy-policy');
+    }
+    
+    public function termsService(){
+          return view('themes.xylo.terms_of_service');
+    }
 }

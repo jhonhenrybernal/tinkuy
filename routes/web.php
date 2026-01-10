@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\SocialMediaLinkController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\SiteSettingsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\TopBarMessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -168,6 +169,16 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     /* Profile */
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+
+    Route::get('topbar-messages', [TopBarMessageController::class, 'index'])->name('topbar_messages.index');
+    Route::post('topbar-messages/data', [TopBarMessageController::class, 'data'])->name('topbar_messages.data');
+    Route::get('topbar-messages/create', [TopBarMessageController::class, 'create'])->name('topbar_messages.create');
+    Route::post('topbar-messages', [TopBarMessageController::class, 'store'])->name('topbar_messages.store');
+    Route::get('topbar-messages/{message}/edit', [TopBarMessageController::class, 'edit'])->name('topbar_messages.edit');
+    Route::put('topbar-messages/{message}', [TopBarMessageController::class, 'update'])->name('topbar_messages.update');
+    Route::post('topbar-messages/update-status', [TopBarMessageController::class, 'updateStatus'])->name('topbar_messages.updateStatus');
+    Route::delete('topbar-messages/{message}', [TopBarMessageController::class, 'destroy'])->name('topbar_messages.destroy');
 });
 
 Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('site-settings.index');

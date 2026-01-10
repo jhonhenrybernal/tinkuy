@@ -12,31 +12,40 @@ class CurrencySeeder extends Seeder
      */
     public function run(): void
     {
+         DB::table('currencies')->truncate();
         DB::table('currencies')->insert([
             [
-                'name' => 'US Dollar',
-                'code' => 'USD',
+                'name' => 'COP Pesos Colombianos',
+                'code' => 'COP',
                 'symbol' => '$',
-                'exchange_rate' => 1.0000,
+                'exchange_rate' => 4150.0000,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'Euro',
-                'code' => 'EUR',
-                'symbol' => '€',
-                'exchange_rate' => 0.9200,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'British Pound',
-                'code' => 'GBP',
-                'symbol' => '£',
-                'exchange_rate' => 0.7900,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'US Dollar',
+            //     'code' => 'USD',
+            //     'symbol' => '$',
+            //     'exchange_rate' => 4.150,
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'Euro',
+            //     'code' => 'EUR',
+            //     'symbol' => '€',
+            //     'exchange_rate' => 0.9200,
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'British Pound',
+            //     'code' => 'GBP',
+            //     'symbol' => '£',
+            //     'exchange_rate' => 0.7900,
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
         ]);
     }
 }

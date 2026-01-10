@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StoreController::class, 'index'])->name('xylo.home');
 Route::get('/home', [StoreController::class, 'index'])->name('xylo.home');
+Route::get('/privacy-policy', [StoreController::class, 'privacyPolicy'])->name('store.footer.privacy_policy');
+Route::get('/terms_of_service', [StoreController::class, 'termsService'])->name('store.footer.terms_of_service');
+Route::get('/home', [StoreController::class, 'index'])->name('xylo.home');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 Route::post('/change-currency', [CurrencyController::class, 'changeCurrency'])->name('change.currency');
 

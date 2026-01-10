@@ -19,8 +19,8 @@
       <div class="col-6 col-md-3 mb-4">
         <h5>{{ __('store.footer.pages') }}</h5>
         <ul class="list-unstyled">
-          <li class="mb-2"><a href="#" class="text-muted text-decoration-none">{{ __('store.footer.privacy_policy') }}</a></li>
-          <li class="mb-2"><a href="#" class="text-muted text-decoration-none">{{ __('store.footer.terms_of_service') }}</a></li>
+          <li class="mb-2"><a href="{{ route('store.footer.privacy_policy') }}" class="text-muted text-decoration-none">{{ __('store.footer.privacy_policy') }}</a></li>
+          <li class="mb-2"><a href="{{ route('store.footer.terms_of_service') }}" class="text-muted text-decoration-none">{{ __('store.footer.terms_of_service') }}</a></li>
         </ul>
       </div>
 

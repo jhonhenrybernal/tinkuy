@@ -164,6 +164,39 @@
             </div>
         </li>
         <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center"
+            data-bs-toggle="collapse"
+            href="#topBarMessagesMenu"
+            role="button"
+            aria-expanded="false"
+            aria-controls="topBarMessagesMenu">
+                <span>
+                    <i class="fas fa-bullhorn me-2"></i>
+                    <span>Mensajes Barra Superior</span>
+                </span>
+                <i class="fas fa-chevron-down"></i>
+            </a>
+
+            <div class="collapse {{ in_array(Route::currentRouteName(), ['admin.topbar_messages.index','admin.topbar_messages.create','admin.topbar_messages.edit']) ? 'show' : '' }}"
+                id="topBarMessagesMenu">
+                <ul class="nav flex-column ms-3">
+                    <li>
+                        <a class="nav-link {{ Route::currentRouteName() == 'admin.topbar_messages.create' ? 'active' : '' }}"
+                        href="{{ route('admin.topbar_messages.create') }}">
+                            Crear
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link {{ Route::currentRouteName() == 'admin.topbar_messages.index' ? 'active' : '' }}"
+                        href="{{ route('admin.topbar_messages.index') }}">
+                            Listado
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#menuMenu" role="button" aria-expanded="false" aria-controls="menuMenu">
                 <span><i class="fas fa-bars me-2"></i> <span>{{ __('cms.sidebar.menu.title') }}</span></span>
                 <i class="fas fa-chevron-down"></i>
