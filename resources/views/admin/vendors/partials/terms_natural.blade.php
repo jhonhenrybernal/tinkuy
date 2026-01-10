@@ -3,49 +3,88 @@
      aria-labelledby="termsModalNaturalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h5 class="modal-title" id="termsModalNaturalLabel">
-                    Términos y condiciones – Persona natural
+                    Términos y Condiciones – Tinkuy (Vendedor persona natural)
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Cerrar"></button>
             </div>
 
             <div class="modal-body">
+
                 <p>
-                    El presente borrador de contrato aplica al proveedor persona natural
+                    El presente documento regula el acceso y uso de la plataforma Tinkuy por parte del vendedor persona natural
                     <strong class="tc-person-name">[Nombre completo]</strong>,
                     identificado con número de documento
-                    <strong class="tc-document-number">[Documento]</strong>, quien actúa
-                    bajo la marca
+                    <strong class="tc-document-number">[Documento]</strong>,
+                    quien comercializa bajo la marca
                     <strong class="tc-brand-name">[Nombre de marca]</strong>.
                 </p>
+
+                <h6 class="mt-3 mb-2">1. Naturaleza del servicio</h6>
                 <p>
-                    1. El proveedor manifiesta que se registra a título personal y que cuenta
-                    con las autorizaciones legales necesarias para adelantar la actividad
-                    económica declarada.
+                    Tinkuy es una plataforma digital de intermediación que conecta a compradores con vendedores de productos colombianos.
+                    Tinkuy <strong>NO</strong> es fabricante, distribuidor ni dueño de los productos, y <strong>NO</strong> participa directamente
+                    en la compraventa.
                 </p>
+
+                <h6 class="mt-3 mb-2">2. Responsabilidad</h6>
+                <p class="mb-2">
+                    Cada vendedor es único y exclusivo responsable de:
+                </p>
+                <ul class="mb-3">
+                    <li>La calidad del producto.</li>
+                    <li>La información publicada.</li>
+                    <li>El despacho y entrega.</li>
+                    <li>Garantías y devoluciones según ley.</li>
+                </ul>
+
+                <p class="mb-2">
+                    Tinkuy no se hace responsable por:
+                </p>
+                <ul class="mb-3">
+                    <li>Incumplimientos del vendedor.</li>
+                    <li>Calidad del producto.</li>
+                    <li>Uso indebido del producto.</li>
+                </ul>
+
+                <h6 class="mt-3 mb-2">3. Registro de usuarios</h6>
+                <p class="mb-2">
+                    Para registrarse como vendedor, el usuario deberá:
+                </p>
+                <ul class="mb-3">
+                    <li>Ser mayor de edad.</li>
+                    <li>Proporcionar información real y verificable.</li>
+                    <li>Aceptar estos Términos y Condiciones.</li>
+                </ul>
+
+                <p class="mb-2">
+                    Tinkuy se reserva el derecho de:
+                </p>
+                <ul class="mb-3">
+                    <li>Suspender cuentas.</li>
+                    <li>Solicitar información adicional.</li>
+                    <li>Cancelar perfiles que incumplan las reglas.</li>
+                </ul>
+
+                <h6 class="mt-3 mb-2">4. Pagos y comisiones</h6>
                 <p>
-                    2. La marca o nombre comercial
-                    <strong class="tc-brand-name">[Nombre de marca]</strong> se utilizará
-                    para efectos comerciales dentro de la plataforma, sin que ello implique
-                    cesión o transferencia de derechos de propiedad intelectual.
+                    Tinkuy podrá cobrar una comisión por el uso de la plataforma. Los valores, porcentajes y métodos de pago
+                    serán informados dentro de la aplicación.
                 </p>
-                <p>
-                    3. El proveedor asume la responsabilidad exclusiva por la calidad,
-                    idoneidad, garantía y soporte de los productos o servicios ofrecidos.
+
+                <h6 class="mt-3 mb-2">5. Modificaciones</h6>
+                <p class="mb-0">
+                    Tinkuy podrá modificar estos Términos y Condiciones cuando lo considere necesario.
+                    El uso continuo de la plataforma implica aceptación de los cambios.
                 </p>
-                <p>
-                    4. El proveedor declara conocer y aceptar las políticas de tarifas,
-                    facturación, devoluciones y manejo de reclamos definidas por la
-                    plataforma.
+
+                <p class="mt-3">
+                    El vendedor declara haber leído, comprendido y aceptado íntegramente este documento.
                 </p>
-                <p>
-                    5. El proveedor autoriza expresamente el tratamiento de sus datos
-                    personales conforme a la política de privacidad, incluyendo la
-                    posibilidad de utilizar su nombre, documento y marca para la
-                    generación de reportes de gestión y analítica.
-                </p>
+
             </div>
 
             <div class="modal-footer">
@@ -53,12 +92,14 @@
                         data-bs-dismiss="modal">
                     Cerrar
                 </button>
+
                 <button type="button"
                         class="btn btn-primary btn-accept-terms"
                         data-vendor-type="natural">
                     Acepto los términos y condiciones
                 </button>
             </div>
+
         </div>
     </div>
 </div>
