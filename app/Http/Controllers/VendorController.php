@@ -142,7 +142,7 @@ class VendorController extends Controller
                 'password' => Hash::make($temporaryPassword),
 
                 'phone'       => $data['phone'] ?? null,
-                'status'      => 'inactive',
+                'status'      => 'active',
                 'description' => $data['about'] ?? null,
                 'page_type'   => 'landing_1',
 

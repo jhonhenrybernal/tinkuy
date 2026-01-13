@@ -69,7 +69,8 @@ class VendorController extends Controller
             'billing_user'     => ['nullable', 'string', 'max:255'],
             'billing_notes'    => ['nullable', 'string'],
 
-            'terms_accepted'   => ['accepted'], // checkbox=
+            'terms_accepted'   => ['accepted'], 
+            'has_delivery_provider' => ['required', 'in:0,1'],
         ]);
         if ($request->hasFile('legal_rut')) {
             $data['legal_rut'] = $request->file('legal_rut')
@@ -137,7 +138,8 @@ class VendorController extends Controller
             'billing_notes'                      => $validated['billing_notes'] ?? null,
             'terms_accepted'                     => (bool) ($validated['terms_accepted'] ?? false),
             'admin_validations'                     => $adminValidations,
-            'approval_updated_by' => auth()->id()
+            'approval_updated_by' => auth()->id(),
+            'has_delivery_provider' => (bool) $validated['has_delivery_provider']
         ]);
         if (!empty($adminValidations)) {
             $this->sendValidationAdmin($vendor, $adminValidations);
@@ -192,8 +194,11 @@ class VendorController extends Controller
             'billing_user'     => ['nullable', 'string', 'max:255'],
             'billing_notes'    => ['nullable', 'string'],
 
-            'terms_accepted'   => ['accepted'], // checkbox
+            'terms_accepted'   => ['accepted'],
+            'has_delivery_provider' => ['required', 'in:0,1'],
         ]);
+        
+
 
         $data = [
             'name'        => trim($validated['name']),
@@ -217,6 +222,7 @@ class VendorController extends Controller
             'billing_user'                       => $validated['billing_user'] ?? null,
             'billing_notes'                      => $validated['billing_notes'] ?? null,
             'terms_accepted'                     => (bool) ($validated['terms_accepted'] ?? false),
+            'has_delivery_provider' => (bool) $validated['has_delivery_provider'],
             
         ];
         
@@ -425,7 +431,7 @@ $items = collect($raw)
 
     public function getVendorData()
     {
-        $vendors = Vendor::select(['id', 'name', 'email', 'phone', 'status','is_prospect']);
+        $vendors = Vendor::select(['id', 'name', 'email', 'phone', 'status', 'has_delivery_provider', 'is_prospect']);
         
         return DataTables::of($vendors)
             ->addColumn('action', function ($vendor) {

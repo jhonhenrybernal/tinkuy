@@ -40,8 +40,9 @@ class Vendor extends Authenticatable
         'billing_user',
         'billing_notes',
         'terms_accepted',
-         'is_prospect',
-         'admin_validations',
+        'is_prospect',
+        'admin_validations',
+        'has_delivery_provider',
     ];
 
 
@@ -52,7 +53,8 @@ class Vendor extends Authenticatable
         'company_media' => 'array',  // NUEVO: JSON → array
         'admin_validations' => 'array',  // NUEVO: JSON → array
         'terms_accepted' => 'boolean',
-         'is_prospect'    => 'boolean', 
+        'is_prospect'    => 'boolean', 
+        'has_delivery_provider' => 'boolean',
     ];
 
     /**

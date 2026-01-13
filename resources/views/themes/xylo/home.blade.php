@@ -195,7 +195,7 @@
                     </div>
                 </div>
                 <!-- Feature Box 4 -->
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <div class="feature-box text-start">
                         <div class="feature-icon">
                             <img src="https://i.ibb.co/XPvjQGG/choose-icon4.png" alt="">
@@ -203,7 +203,7 @@
                         <h3>{{ __('store.home.ten_years_services_title') }}</h3>
                         <p>{{ __('store.home.ten_years_services_text') }}</p>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>

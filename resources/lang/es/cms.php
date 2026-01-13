@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'velstore' => 'Velstore',
+        'velstore' => 'Tinkuy',
         'login' => 'Iniciar sesión',
         'email' => 'Correo electrónico',
         'password' => 'Contraseña',
@@ -377,6 +377,9 @@ return [
         'success_update' => '¡Proveedor actualizado con éxito!',
         'success_delete' => '¡Proveedor eliminado con éxito!',
         'error_delete'   => '¡Error al eliminar el proveedor! Por favor, inténtelo de nuevo.',
+        'has_delivery_provider'   => 'Proveedor mensajería/entrega',
+        'is_delivery_provider'   => 'Cuenta Proveedor mensajería/entrega',
+
     ],
     'languages' => [
         'english' => 'Inglés',

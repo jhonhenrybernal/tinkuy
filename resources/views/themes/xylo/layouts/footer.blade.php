@@ -10,8 +10,8 @@
       <div class="col-6 col-md-3 mb-4">
         <h5> {{ __('store.footer.account') }}</h5>
         <ul class="list-unstyled">
-          <li class="mb-2"><a href="#" class="text-muted text-decoration-none">{{ __('store.footer.my_account') }}</a></li>
-          <li class="mb-2"><a href="#" class="text-muted text-decoration-none">{{ __('store.footer.wishlist') }}</a></li>
+          <li class="mb-2"><a href="{{route('customer.profile.edit')}}" class="text-muted text-decoration-none">{{ __('store.footer.my_account') }}</a></li>
+          <li class="mb-2"><a href="{{route('cart.view')}}" class="text-muted text-decoration-none">{{ __('store.footer.wishlist') }}</a></li>
         </ul>
       </div>
 

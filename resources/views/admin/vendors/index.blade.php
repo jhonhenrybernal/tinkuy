@@ -26,6 +26,7 @@
                         <th>{{ __('cms.vendors.email') }}</th>
                         <th>{{ __('cms.vendors.phone') }}</th>
                         <th>{{ __('cms.vendors.status') }}</th>
+                        <th>{{ __('cms.vendors.has_delivery_provider') }}</th>
                         <th>{{ __('cms.vendors.prospect') }}</th>
                         <th>{{ __('cms.vendors.actions') }}</th>
                     </tr>
@@ -101,6 +102,15 @@
                             return data === 'active'
                                 ? '<span class="badge bg-success">{{ __('cms.vendors.active') }}</span>'
                                 : '<span class="badge bg-danger">{{ __('cms.vendors.inactive') }}</span>';
+                        }
+                    },
+                    {
+                        data: 'has_delivery_provider',
+                        name: 'has_delivery_provider',
+                        render: function (data) {
+                            return data === true
+                                ? '<span class="badge bg-success">Sí</span>'
+                                : '<span class="badge bg-danger">No</span>';
                         }
                     },
                     {

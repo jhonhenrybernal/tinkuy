@@ -15,8 +15,8 @@ return [
         'terms_of_service' => 'Términos del servicio',
         'follow_us' => 'Síguenos',
         'footer_logo_alt' => 'Logo de pie de página de Velstore',
-        'copyright' => '© 2025 Demostración de Velstore. Todos los derechos reservados.',
-        'powered_by' => 'Desarrollado por Velstore Labs',
+        'copyright' => '© 2026. Todos los derechos reservados.',
+        'powered_by' => 'Desarrollado por DevQuick',
     ],
 
     'home' => [
@@ -31,11 +31,11 @@ return [
         // Why Choose Us section
         'why_choose_us' => '¿Por qué elegirnos?',
         'fast_delivery_title' => 'Entrega rápida',
-        'fast_delivery_text' => 'Entregamos tus pedidos de manera rápida y segura hasta la puerta de tu casa.',
+        'fast_delivery_text' => 'Contamos con proveedores y de los productos en la plataforma.',
         'customer_support_title' => 'Atención al cliente',
-        'customer_support_text' => 'Nuestro equipo de soporte está siempre disponible para ayudarte en cualquier momento y lugar.',
-        'trusted_worldwide_title' => 'Confiado en todo el mundo',
-        'trusted_worldwide_text' => 'Miles de clientes satisfechos, excelentes reseñas y altas calificaciones.',
+        'customer_support_text' => 'Nuestro equipo de soporte está siempre disponible para ayudarte en cualquier momento y lugar de colombia.',
+        'trusted_worldwide_title' => 'Tu negocio crecera en colombia',
+        'trusted_worldwide_text' => 'Nuestro proposito es crecer los negocios y productos 100% colombiano.',
         'ten_years_services_title' => '10 años de servicio',
         'ten_years_services_text' => 'Más de 10 años de servicio confiable ofreciendo calidad y satisfacción.',
     ],
@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'Bienvenido',
-        'theme_name' => 'Xylo-Theme 👋 Plataforma Xylo',
+        'theme_name' => '',
         'signup_now' => 'Crea tu cuenta de cliente',
         'signup_description' => 'Regístrate para comenzar a comprar, rastrear tus pedidos, guardar tus favoritos y acceder a ofertas exclusivas.',
-        'copyright' => '© 2025 Xylo-Theme. Todos los derechos reservados.',
+        'copyright' => '© 2026. Todos los derechos reservados.',
         'welcome_back' => 'Comencemos',
         'form_subtitle' => 'Ingresa tus datos para crear tu cuenta de compra.',
         'name' => 'Nombre completo',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'Bienvenido de nuevo',
-        'theme_name' => 'Xylo-Theme 👋 Plataforma Xylo',
+        'theme_name' => '',
         'login_now' => 'Inicia sesión en tu cuenta',
         'login_description' => 'Accede a tu cuenta para gestionar pedidos, guardar favoritos y disfrutar de una experiencia de compra personalizada.',
-        'copyright' => '© 2025 Xylo-Theme. Todos los derechos reservados.',
+        'copyright' => '© 2026. Todos los derechos reservados.',
         'welcome_back' => 'Nos alegra verte otra vez',
         'form_subtitle' => 'Introduce tus datos de acceso para continuar.',
         'email' => 'Correo electrónico',

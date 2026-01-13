@@ -318,6 +318,23 @@
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+                    <div class="col-md-6">
+                        <label for="has_delivery_provider" class="form-label">
+                            {{ __('cms.vendors.is_delivery_provider') }}
+                        </label>
+
+                        <select name="has_delivery_provider" id="has_delivery_provider"
+                                class="form-select @error('has_delivery_provider') is-invalid @enderror">
+                            <option value="1" {{ old('has_delivery_provider') == '1' ? 'selected' : '' }}>Sí</option>
+                            <option value="0" {{ old('has_delivery_provider', '0') == '0' ? 'selected' : '' }}>No</option>
+                        </select>
+                        <small id="delivery_provider_note" class="text-muted d-none">
+                            Al seleccionar <strong>No</strong>, se aplicará una tarifa de acuerdo al proveedor por cada entrega.
+                        </small>
+                        @error('has_delivery_provider')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 {{-- contraseña + logo --}}
@@ -1487,7 +1504,18 @@ function updateTermsPreview() {
             alert('No se pudo cargar el catálogo de validación.');
         }
     })();
+    document.addEventListener('DOMContentLoaded', function () {
+        const select = document.getElementById('has_delivery_provider');
+        const note = document.getElementById('delivery_provider_note');
 
+        function toggleNote() {
+            const isYes = String(select.value) === '0';
+            note.classList.toggle('d-none', !isYes);
+        }
+
+        toggleNote();
+        select.addEventListener('change', toggleNote);
+    });
 })();
 </script>
 @endsection

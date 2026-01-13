@@ -100,7 +100,9 @@
                         </span>
                     @endif
                 </a>
-
+                <a href="{{ route('vendor.login') }}" class="text-dark homepage-icon" title="Vendedor">
+                    <i class="fa-solid fa-store"></i>
+                </a>    
                  <!-- Account Icon -->
                 <a href="#" class="text-dark dropdown-toggle homepage-icon" data-bs-toggle="dropdown">
                     @auth('customer')
