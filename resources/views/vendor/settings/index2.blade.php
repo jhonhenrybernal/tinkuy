@@ -1,5 +1,4 @@
-@extends('vendor.layouts.master')
-
+@extends('admin.layouts.admin')
 
 @section('content')
 @php
@@ -20,7 +19,7 @@
     </div>
 
     <div class="card-body">
-        <form id="vendor-form" action="{{ route('vendor.business.settings.update', $vendor->id) }}" method="POST" enctype="multipart/form-data">
+        <form id="vendor-form" action="{{ route('admin.vendors.update', $vendor->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -444,7 +443,7 @@
                     {{-- Opcional: si quieres que al guardar SIN tocar banners, se mantengan los existentes,
                         NO pongas hidden aquí. Tu update() ya conserva company_media si no llegan paths.
                         Si quieres reemplazo completo, sí podrías precargar, pero usualmente no. --}}
-                         <div id="banners-paths-container">
+                        <div id="banners-paths-container">
                         @if(!empty($existingBanners))
                             @foreach($existingBanners as $banner)
                                 @php $path = $banner['path'] ?? null; @endphp
@@ -691,23 +690,13 @@
             </div>
             <hr class="my-4">
 
-            @php
-                $termsAccepted = (bool) old('terms_accepted', $vendor->terms_accepted ?? false);
-            @endphp
-
             <div class="mb-3 form-check">
                 <input class="form-check-input"
                     type="checkbox"
                     value="1"
                     id="terms_accepted"
                     name="terms_accepted"
-                    {{ $termsAccepted ? 'checked' : '' }}
-                    {{ $termsAccepted ? 'disabled' : '' }}>
-
-                {{-- Si está disabled, este hidden asegura que viaje el valor 1 en el submit --}}
-                @if($termsAccepted)
-                    <input type="hidden" name="terms_accepted" value="1">
-                @endif
+                    {{ old('terms_accepted', $vendor->terms_accepted ?? false) ? 'checked' : '' }}>
 
                 <label class="form-check-label" for="terms_accepted">
                     He leído y acepto los términos y condiciones del contrato de proveedor.
@@ -719,90 +708,29 @@
                     </button>
                 </label>
             </div>
-
             <hr class="my-4">
 
-           @php
-            use App\Models\AdminValidationField;
-            use App\Models\AdminValidationReason;
-
-            // JSON actual (string) -> array
-            $adminValidationsRaw = old(
-                'admin_validations',
-                isset($vendor)
-                    ? (is_array($vendor->admin_validations) ? json_encode($vendor->admin_validations) : $vendor->admin_validations)
-                    : '[]'
-            );
-
-            $adminValidationsArr = json_decode($adminValidationsRaw, true);
-            $adminValidationsArr = is_array($adminValidationsArr) ? $adminValidationsArr : [];
-
-            // Catálogos (solo activos)
-            $fieldMap = AdminValidationField::where('is_active', 1)
-                ->pluck('label', 'key')
-                ->toArray();
-
-            $reasonMap = AdminValidationReason::where('is_active', 1)
-                ->pluck('label', 'value')
-                ->toArray();
-            @endphp
-
             <div class="card mb-4" id="admin-validation-card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <strong>Validación administrativo</strong>
+
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-admin-validation">
+                        Agregar nueva validación
+                    </button>
                 </div>
 
                 <div class="card-body">
                     <p class="text-muted small mb-3">
-                        Observaciones registradas por el área administrativa (solo lectura).
+                        Registra observaciones por campo para el proceso de revisión.
                     </p>
 
-                   @if(empty($adminValidationsArr))
-                        <div class="alert alert-light mb-0">
-                            No hay validaciones registradas.
-                        </div>
-                    @else
-                        <ul class="list-group">
-                            @foreach($adminValidationsArr as $item)
-                                @php
-                                    $fieldKey  = $item['field'] ?? null;
-                                    $reasonVal = $item['reason'] ?? null;
-                                    $custom    = trim($item['custom_reason'] ?? '');
+                    <div id="admin-validations-list" class="d-flex flex-column gap-2"></div>
 
-                                    // Label del campo
-                                    $fieldLabel = $fieldKey ? ($fieldMap[$fieldKey] ?? $fieldKey) : '-';
-
-                                    // Label del motivo
-                                    // Si reason = other y hay custom_reason -> mostrar custom
-                                    if ($reasonVal === 'other' && $custom !== '') {
-                                        $reasonLabel = $custom;
-                                    } else {
-                                        $reasonLabel = $reasonVal ? ($reasonMap[$reasonVal] ?? $reasonVal) : '-';
-                                    }
-                                @endphp
-
-                               <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="fw-semibold">Campo</div>
-                                            <div>{{ $fieldLabel }}</div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="fw-semibold">Motivo</div>
-                                            <div>{{ $reasonLabel }}</div>
-                                        </div>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-
-                    {{-- Mantener hidden sin editar --}}
-                    <input type="hidden" name="admin_validations" id="admin_validations" value="{{ $adminValidationsRaw }}">
-
-
-                    {{-- Se mantiene hidden para que el backend reciba el JSON (sin permitir editarlo) --}}
+                    {{-- Aquí se guarda el JSON final --}}
+                    <input type="hidden"
+                        name="admin_validations"
+                        id="admin_validations"
+                        value="{{ old('admin_validations', isset($vendor) ? (is_array($vendor->admin_validations) ? json_encode($vendor->admin_validations) : $vendor->admin_validations) : '[]') }}">
                 </div>
             </div>
 
@@ -811,7 +739,7 @@
                 <button type="submit" class="btn btn-primary">
                     Guardar cambios
                 </button>
-                <a href="{{ route('vendor.business.settings.edit') }}" class="btn btn-secondary">
+                <a href="{{ route('admin.vendors.index') }}" class="btn btn-secondary">
                     Cancelar
                 </a>
             </div>
@@ -844,7 +772,7 @@
 <script>
      // --- Vista previa de plantillas ---
     function openTemplatePreview(pageType, vendorId) {
-        let baseUrl = "{{ route('vendor.template-preview', ['pageType' => 'PLACEHOLDER']) }}";
+        let baseUrl = "{{ route('admin.vendors.template-preview', ['pageType' => 'PLACEHOLDER']) }}";
         baseUrl = baseUrl.replace('PLACEHOLDER', pageType);
 
         const params = new URLSearchParams();
@@ -1174,7 +1102,7 @@
         };
 
         async function loadCatalog(vendorType) {
-            const url = "{{ route('vendor.validation.catalog') }}" + "?vendor_type=" + encodeURIComponent(vendorType || 'informal');
+            const url = "{{ route('admin.validation.catalog') }}" + "?vendor_type=" + encodeURIComponent(vendorType || 'informal');
             const resp = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
             const data = await resp.json();
 
@@ -1328,7 +1256,7 @@
         // Crear motivo en BD
         // -------------------------
         async function createReason(label) {
-            const resp = await fetch("{{ route('vendor.validation.reasons.store') }}", {
+            const resp = await fetch("{{ route('admin.validation.reasons.store') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1493,7 +1421,7 @@
                 video.src = url;
             });
         }
-
+        
         // Cuenta los hidden inputs (lo nuevo subido) + cuenta existentes (desde blade)
         function getExistingCountFromBlade(type) {
             // type: 'banner' | 'company'
@@ -1501,6 +1429,7 @@
             const existingCompany = Number(document.body.dataset.existingCompany || 0);
             return type === 'banner' ? existingBanners : existingCompany;
         }
+
 
         function getHiddenCount(hiddenContainer) {
             if (!hiddenContainer) return 0;
@@ -1625,7 +1554,7 @@
                     formData.append('type', type);
                     files.forEach(file => formData.append('media[]', file));
 
-                    const response = await fetch("{{ route('vendor.resize-media') }}", {
+                    const response = await fetch("{{ route('admin.vendors.resize-media') }}", {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',

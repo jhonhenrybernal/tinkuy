@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'velstore' => 'Tinkuy',
+        'velstore' => 'Nokay',
         'login' => 'Giriş Yap',
         'email' => 'E-posta Adresi',
         'password' => 'Parola',

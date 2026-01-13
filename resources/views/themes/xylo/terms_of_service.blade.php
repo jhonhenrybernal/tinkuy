@@ -15,7 +15,7 @@
                     </div>
 
                     <h1 class="mt-3">Términos y Condiciones Generales de Uso</h1>
-                    <p class="text-muted mb-0">TINKUY</p>
+                    <p class="text-muted mb-0">NOKAY</p>
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@
                         <div class="card-body p-4 p-lg-5">
 
                             <p class="text-muted mb-4">
-                                Los presentes Términos y Condiciones regulan el acceso y uso de la plataforma digital TINKUY,
+                                Los presentes Términos y Condiciones regulan el acceso y uso de la plataforma digital NOKAY,
                                 en adelante “la Plataforma”, la cual actúa como un Marketplace de intermediación que conecta
                                 vendedores de productos hechos en Colombia con compradores interesados en adquirirlos.
                             </p>
@@ -46,7 +46,7 @@
 
                             <h4 id="naturaleza" class="mt-4">1. Naturaleza del servicio</h4>
                             <p class="text-muted">
-                                TINKUY actúa exclusivamente como un intermediario tecnológico. En ningún caso TINKUY es vendedor,
+                                NOKAY actúa exclusivamente como un intermediario tecnológico. En ningún caso NOKAY es vendedor,
                                 fabricante, distribuidor, comerciante, almacenador o propietario de los productos ofrecidos dentro
                                 de la Plataforma.
                             </p>
@@ -65,7 +65,7 @@
 
                             <h4 id="registro" class="mt-4">3. Registro y veracidad de la información</h4>
                             <p class="text-muted">
-                                Los usuarios se obligan a suministrar información veraz, completa y actualizada. TINKUY podrá suspender
+                                Los usuarios se obligan a suministrar información veraz, completa y actualizada. NOKAY podrá suspender
                                 o cancelar cuentas cuando identifique información falsa, inconsistente o engañosa.
                             </p>
 
@@ -79,11 +79,11 @@
                                 <li>Entrega oportuna.</li>
                                 <li>Garantías, devoluciones y reclamos.</li>
                             </ul>
-                            <p class="text-muted">TINKUY no asume responsabilidad por incumplimientos del vendedor.</p>
+                            <p class="text-muted">NOKAY no asume responsabilidad por incumplimientos del vendedor.</p>
 
                             <h4 id="informales" class="mt-4">5. Vendedores informales</h4>
                             <p class="text-muted">
-                                Los vendedores informales operan bajo su propia responsabilidad. TINKUY no actúa como empleador,
+                                Los vendedores informales operan bajo su propia responsabilidad. NOKAY no actúa como empleador,
                                 socio, representante legal ni responsable tributario.
                             </p>
                             <p class="text-muted">
@@ -92,14 +92,14 @@
 
                             <h4 id="compradores" class="mt-4">6. Condiciones aplicables a los compradores</h4>
                             <ul class="text-muted">
-                                <li>TINKUY no es el vendedor.</li>
+                                <li>NOKAY no es el vendedor.</li>
                                 <li>Reclamos deben dirigirse al vendedor.</li>
                                 <li>No se garantiza disponibilidad ni calidad de productos de terceros.</li>
                             </ul>
 
                             <h4 id="pagos" class="mt-4">7. Pagos y transacciones</h4>
                             <p class="text-muted">
-                                Los pagos podrán realizarse mediante pasarelas de terceros. TINKUY no es responsable por fallas
+                                Los pagos podrán realizarse mediante pasarelas de terceros. NOKAY no es responsable por fallas
                                 atribuibles a dichas plataformas.
                             </p>
 
@@ -112,12 +112,12 @@
 
                             <h4 id="propiedad" class="mt-4">9. Propiedad intelectual</h4>
                             <p class="text-muted">
-                                Todos los contenidos y marcas son propiedad de TINKUY o terceros autorizados y están protegidos por la ley.
+                                Todos los contenidos y marcas son propiedad de NOKAY o terceros autorizados y están protegidos por la ley.
                             </p>
 
                             <h4 id="suspension" class="mt-4">10. Suspensión y cancelación</h4>
                             <p class="text-muted">
-                                TINKUY podrá suspender o cancelar cuentas que incumplan estos términos o la ley.
+                                NOKAY podrá suspender o cancelar cuentas que incumplan estos términos o la ley.
                             </p>
 
                             <h4 id="modificaciones" class="mt-4">11. Modificaciones</h4>

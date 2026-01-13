@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'velstore' => 'Tinkuy',
+        'velstore' => 'Nokay',
         'login' => 'Login',
         'email' => 'Email Address',
         'password' => 'Password',

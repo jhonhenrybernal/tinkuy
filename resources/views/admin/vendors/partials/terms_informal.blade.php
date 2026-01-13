@@ -6,7 +6,7 @@
 
             <div class="modal-header">
                 <h5 class="modal-title" id="termsModalInformalLabel">
-                    Términos y condiciones para vendedores informales – TINKUY
+                    Términos y condiciones para vendedores informales – NOKAY
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Cerrar"></button>
@@ -21,13 +21,13 @@
                     <strong class="tc-document-number">[Documento]</strong>,
                     quien comercializa bajo la marca
                     <strong class="tc-brand-name">[Nombre de marca]</strong>,
-                    puede ofrecer productos a través de la plataforma digital TINKUY, en calidad de vendedor informal.
+                    puede ofrecer productos a través de la plataforma digital NOKAY, en calidad de vendedor informal.
                 </p>
 
                 <p>
                     Al registrarse y utilizar la plataforma, el vendedor declara que actúa como persona natural,
                     que no cuenta con registro mercantil ni constitución como persona jurídica, y que la información
-                    suministrada a TINKUY es veraz, completa y actualizada.
+                    suministrada a NOKAY es veraz, completa y actualizada.
                 </p>
 
                 <p>
@@ -37,7 +37,7 @@
                 </p>
 
                 <p>
-                    TINKUY se reserva el derecho de retirar cualquier producto que incumpla estas condiciones.
+                    NOKAY se reserva el derecho de retirar cualquier producto que incumpla estas condiciones.
                 </p>
 
                 <p>
@@ -51,11 +51,11 @@
                 </ul>
 
                 <p>
-                    TINKUY podrá monitorear de forma permanente el volumen de ventas y los ingresos generados.
+                    NOKAY podrá monitorear de forma permanente el volumen de ventas y los ingresos generados.
                 </p>
 
                 <p>
-                    En caso de superar los límites establecidos, TINKUY podrá notificar al vendedor y exigir el inicio
+                    En caso de superar los límites establecidos, NOKAY podrá notificar al vendedor y exigir el inicio
                     de un proceso de formalización, el cual podrá incluir la obtención del Registro Único Tributario (RUT)
                     y/o el registro en la Cámara de Comercio.
                 </p>
@@ -71,12 +71,12 @@
                 </p>
 
                 <p>
-                    TINKUY actúa exclusivamente como intermediario digital y no asume responsabilidades contables, fiscales
+                    NOKAY actúa exclusivamente como intermediario digital y no asume responsabilidades contables, fiscales
                     ni tributarias en nombre del vendedor.
                 </p>
 
                 <p>
-                    El vendedor acepta que TINKUY no es fabricante, distribuidor ni propietario de los productos ofrecidos,
+                    El vendedor acepta que NOKAY no es fabricante, distribuidor ni propietario de los productos ofrecidos,
                     no participa directamente en la compraventa y no garantiza la calidad, legalidad, entrega o idoneidad
                     de los productos.
                 </p>
@@ -86,12 +86,12 @@
                 </p>
 
                 <p>
-                    TINKUY podrá suspender, limitar o cancelar la cuenta del vendedor informal cuando se evidencie
+                    NOKAY podrá suspender, limitar o cancelar la cuenta del vendedor informal cuando se evidencie
                     incumplimiento de los presentes términos o de los Términos y Condiciones generales de la plataforma.
                 </p>
 
                 <p>
-                    El registro y uso de TINKUY como vendedor informal implica la aceptación expresa de las presentes
+                    El registro y uso de NOKAY como vendedor informal implica la aceptación expresa de las presentes
                     condiciones, las cuales permanecerán vigentes mientras el usuario opere bajo esta modalidad.
                 </p>
 

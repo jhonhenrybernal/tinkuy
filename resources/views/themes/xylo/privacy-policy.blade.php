@@ -15,7 +15,7 @@
                     </div>
 
                     <h1 class="mt-3">Política de Privacidad y Tratamiento de Datos Personales</h1>
-                    <p class="text-muted mb-0">TINKUY</p>
+                    <p class="text-muted mb-0">NOKAY</p>
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@
 
                             <p class="text-muted mb-4">
                                 En cumplimiento de lo dispuesto en la Ley 1581 de 2012, el Decreto 1377 de 2013 y demás normas concordantes,
-                                TINKUY adopta la presente Política de Privacidad y Tratamiento de Datos Personales, la cual regula la recolección,
+                                NOKAY adopta la presente Política de Privacidad y Tratamiento de Datos Personales, la cual regula la recolección,
                                 uso, almacenamiento, circulación y protección de los datos personales de los usuarios que acceden y utilizan la
                                 plataforma digital, en adelante “la Plataforma”.
                             </p>
@@ -46,7 +46,7 @@
 
                             <h4 id="responsable" class="mt-4">1. Responsable del tratamiento</h4>
                             <p class="text-muted">
-                                TINKUY será el responsable del tratamiento de los datos personales recolectados a través de la Plataforma, y actuará
+                                NOKAY será el responsable del tratamiento de los datos personales recolectados a través de la Plataforma, y actuará
                                 conforme a los principios de legalidad, finalidad, libertad, veracidad, transparencia, acceso y circulación restringida,
                                 seguridad y confidencialidad.
                             </p>
@@ -68,7 +68,7 @@
 
                             <h4 id="datos" class="mt-4">3. Datos personales recolectados</h4>
                             <p class="text-muted">
-                                TINKUY podrá recolectar y tratar, entre otros, los siguientes datos:
+                                NOKAY podrá recolectar y tratar, entre otros, los siguientes datos:
                             </p>
                             <ul class="text-muted">
                                 <li>Datos de identificación y contacto.</li>
@@ -85,7 +85,7 @@
 
                             <h4 id="autorizacion" class="mt-4">4. Autorización para el tratamiento</h4>
                             <p class="text-muted">
-                                El titular autoriza de manera previa, expresa, informada e inequívoca a TINKUY para tratar sus datos personales conforme
+                                El titular autoriza de manera previa, expresa, informada e inequívoca a NOKAY para tratar sus datos personales conforme
                                 a esta Política. Dicha autorización se entiende otorgada mediante el registro, aceptación expresa o uso continuado de la Plataforma.
                             </p>
 
@@ -112,19 +112,19 @@
                             </p>
                             <p class="text-muted">
                                 Los datos de los vendedores informales serán tratados con fines de identificación, control de límites operativos y prevención de riesgos,
-                                sin que ello implique vínculo laboral, societario o representación legal con TINKUY.
+                                sin que ello implique vínculo laboral, societario o representación legal con NOKAY.
                             </p>
 
                             <h4 id="transferencia" class="mt-4">7. Transferencia y transmisión de datos</h4>
                             <p class="text-muted">
-                                TINKUY podrá transmitir o transferir datos personales a terceros proveedores tecnológicos, pasarelas de pago, servicios de almacenamiento o
+                                NOKAY podrá transmitir o transferir datos personales a terceros proveedores tecnológicos, pasarelas de pago, servicios de almacenamiento o
                                 autoridades competentes, cuando sea necesario para la operación de la Plataforma o por obligación legal, garantizando niveles adecuados de protección.
                             </p>
 
                             <h4 id="seguridad" class="mt-4">8. Seguridad de la información</h4>
                             <p class="text-muted">
-                                TINKUY adopta medidas técnicas, administrativas y organizativas razonables para proteger los datos personales. No obstante, el titular reconoce que
-                                ningún sistema es completamente infalible y exonera a TINKUY de responsabilidad por eventos derivados de causas ajenas a su control razonable.
+                                NOKAY adopta medidas técnicas, administrativas y organizativas razonables para proteger los datos personales. No obstante, el titular reconoce que
+                                ningún sistema es completamente infalible y exonera a NOKAY de responsabilidad por eventos derivados de causas ajenas a su control razonable.
                             </p>
 
                             <h4 id="derechos" class="mt-4">9. Derechos del titular</h4>
@@ -141,12 +141,12 @@
 
                             <h4 id="cookies" class="mt-4">11. Uso de cookies y tecnologías similares</h4>
                             <p class="text-muted">
-                                TINKUY podrá utilizar cookies y tecnologías similares para el correcto funcionamiento de la Plataforma, análisis de uso y mejora de la experiencia del usuario.
+                                NOKAY podrá utilizar cookies y tecnologías similares para el correcto funcionamiento de la Plataforma, análisis de uso y mejora de la experiencia del usuario.
                             </p>
 
                             <h4 id="modificaciones" class="mt-4">12. Modificaciones</h4>
                             <p class="text-muted">
-                                TINKUY se reserva el derecho de modificar esta Política de Privacidad en cualquier momento. Las modificaciones entrarán en vigor desde su publicación en la Plataforma.
+                                NOKAY se reserva el derecho de modificar esta Política de Privacidad en cualquier momento. Las modificaciones entrarán en vigor desde su publicación en la Plataforma.
                             </p>
 
                             <h4 id="vigencia" class="mt-4">13. Vigencia</h4>
