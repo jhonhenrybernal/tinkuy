@@ -1,4 +1,5 @@
-@extends('admin.layouts.admin')
+@extends('vendor.layouts.master')
+
 
 @section('content')
 @php
@@ -19,7 +20,7 @@
     </div>
 
     <div class="card-body">
-        <form id="vendor-form" action="{{ route('admin.vendors.update', $vendor->id) }}" method="POST" enctype="multipart/form-data">
+        <form id="vendor-form" action="{{ route('vendor.business.settings.update', $vendor->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -443,7 +444,7 @@
                     {{-- Opcional: si quieres que al guardar SIN tocar banners, se mantengan los existentes,
                         NO pongas hidden aquí. Tu update() ya conserva company_media si no llegan paths.
                         Si quieres reemplazo completo, sí podrías precargar, pero usualmente no. --}}
-                        <div id="banners-paths-container">
+                         <div id="banners-paths-container">
                         @if(!empty($existingBanners))
                             @foreach($existingBanners as $banner)
                                 @php $path = $banner['path'] ?? null; @endphp
@@ -739,7 +740,7 @@
                 <button type="submit" class="btn btn-primary">
                     Guardar cambios
                 </button>
-                <a href="{{ route('admin.vendors.index') }}" class="btn btn-secondary">
+                <a href="{{ route('vendor.business.settings.edit') }}" class="btn btn-secondary">
                     Cancelar
                 </a>
             </div>
@@ -772,7 +773,7 @@
 <script>
      // --- Vista previa de plantillas ---
     function openTemplatePreview(pageType, vendorId) {
-        let baseUrl = "{{ route('admin.vendors.template-preview', ['pageType' => 'PLACEHOLDER']) }}";
+        let baseUrl = "{{ route('vendor.template-preview', ['pageType' => 'PLACEHOLDER']) }}";
         baseUrl = baseUrl.replace('PLACEHOLDER', pageType);
 
         const params = new URLSearchParams();
@@ -1102,7 +1103,7 @@
         };
 
         async function loadCatalog(vendorType) {
-            const url = "{{ route('admin.validation.catalog') }}" + "?vendor_type=" + encodeURIComponent(vendorType || 'informal');
+            const url = "{{ route('vendor.validation.catalog') }}" + "?vendor_type=" + encodeURIComponent(vendorType || 'informal');
             const resp = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
             const data = await resp.json();
 
@@ -1256,7 +1257,7 @@
         // Crear motivo en BD
         // -------------------------
         async function createReason(label) {
-            const resp = await fetch("{{ route('admin.validation.reasons.store') }}", {
+            const resp = await fetch("{{ route('vendor.validation.reasons.store') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1421,7 +1422,7 @@
                 video.src = url;
             });
         }
-        
+
         // Cuenta los hidden inputs (lo nuevo subido) + cuenta existentes (desde blade)
         function getExistingCountFromBlade(type) {
             // type: 'banner' | 'company'
@@ -1429,7 +1430,6 @@
             const existingCompany = Number(document.body.dataset.existingCompany || 0);
             return type === 'banner' ? existingBanners : existingCompany;
         }
-
 
         function getHiddenCount(hiddenContainer) {
             if (!hiddenContainer) return 0;
@@ -1554,7 +1554,7 @@
                     formData.append('type', type);
                     files.forEach(file => formData.append('media[]', file));
 
-                    const response = await fetch("{{ route('admin.vendors.resize-media') }}", {
+                    const response = await fetch("{{ route('vendor.resize-media') }}", {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',

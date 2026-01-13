@@ -52,5 +52,8 @@
                 </ul>
             </div>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ Route::currentRouteName() == 'vendor.index' ? 'active' : '' }}" href="{{ route('vendor.business.settings.edit') }}" href="#"<span><i class="fas fa-user-tag me-2"></i> <span>{{ __('cms.sidebar.vendors.title') }}</span></a>
+        </li>
     </ul>
 </nav>

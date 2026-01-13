@@ -8,6 +8,7 @@ use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ProductReviewController;
 use App\Http\Controllers\Vendor\ProfileController;
 use App\Http\Controllers\Vendor\SocialMediaLinkController;
+use App\Http\Controllers\Vendor\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('vendor')->group(function () {
@@ -39,5 +40,16 @@ Route::prefix('vendor')->group(function () {
         /** Profile */
         Route::get('profile/edit', [ProfileController::class, 'edit'])->name('vendor.profile.edit');
         Route::patch('profile', [ProfileController::class, 'update'])->name('vendor.profile.update');
+
+        Route::get('business/settings', [SettingsController::class, 'index'])->name('vendor.business.settings.edit');
+        Route::put('business/settings/{id}', [SettingsController::class, 'update'])->name('vendor.business.settings.update');
+        Route::get('validation/catalog', [SettingsController::class, 'adminValidationCatalog'])->name('vendor.validation.catalog');
+
+        Route::post('validation/reasons', [SettingsController::class, 'adminValidationReasonStore'])->name('vendor.validation.reasons.store');
+
+        Route::put('validation/reasons/{id}', [SettingsController::class, 'adminValidationReasonUpdate'])->name('vendor.validation.reasons.update');
+
+        Route::get('vendor/template-preview/{pageType}', [SettingsController::class, 'templatePreview'])->name('vendor.template-preview');
+        Route::post('vendor/resize-media', [SettingsController::class, 'resizeMedia'])->name('vendor.resize-media');
     });
 });

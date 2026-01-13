@@ -1,6 +1,5 @@
 <?php
-
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Vendor;
@@ -19,141 +18,13 @@ use App\Mail\VendorNotApprovedMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class VendorController extends Controller
+class SettingsController extends Controller
 {
     public function index()
     {
-        return view('admin.vendors.index');
-    }
-
-    public function create()
-    {
-        return view('admin.vendors.create');
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'email', 'max:255', 'unique:vendors,email'],
-            'password' => ['required', 'confirmed', Password::min(8)->symbols()],
-            'phone'    => ['nullable', 'string', 'max:20'],
-            'status'   => ['required', 'in:active,inactive,banned'],
-
-            'profile_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'description'   => ['nullable', 'string'],
-            'page_type'     => ['required', 'in:landing_1,landing_2,landing_3'],
-
-            // campos simples para “parametrizar” company_media
-            'banners.*'          => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'company_images.*'   => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'vendor_type' => ['required', 'in:informal,natural,juridica'],
-            'brand_name'  => ['nullable', 'string', 'max:255'],
-
-            'personal_document_type'   => ['nullable', 'string', 'max:10'],
-            'personal_document_number' => ['nullable', 'string', 'max:50'],
-            'city'                     => ['nullable', 'string', 'max:100'],
-
-            'company_name'  => ['nullable', 'string', 'max:255'],
-            'company_nit'   => ['nullable', 'string', 'max:50'],
-            'company_nit_dv'=> ['nullable', 'string', 'max:10'],
-
-            'legal_representative_name'            => ['nullable', 'string', 'max:255'],
-            'legal_representative_document_type'   => ['nullable', 'string', 'max:10'],
-            'legal_representative_document_number' => ['nullable', 'string', 'max:50'],
-
-            'legal_rut'     => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
-            'legal_chamber' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
-
-            'billing_provider' => ['required', 'in:internal,sigo,alegra,other'],
-            'billing_user'     => ['nullable', 'string', 'max:255'],
-            'billing_notes'    => ['nullable', 'string'],
-
-            'terms_accepted'   => ['accepted'], 
-            'has_delivery_provider' => ['required', 'in:0,1'],
-        ]);
-        if ($request->hasFile('legal_rut')) {
-            $data['legal_rut'] = $request->file('legal_rut')
-                ->store('vendors/legal_rut', 'public');
-        }
-
-        if ($request->hasFile('legal_chamber')) {
-            $data['legal_chamber'] = $request->file('legal_chamber')
-                ->store('vendors/legal_chamber', 'public');
-        }
-        // Logo
-        $profileImagePath = null;
-        if ($request->hasFile('profile_image')) {
-            $profileImagePath = $request->file('profile_image')->store('vendors/logo', 'public');
-        }
-
-          // company_media a partir de paths que ya creó resizeMedia
-        $companyMedia = [];
-
-        if ($request->filled('banners_paths')) {
-            $companyMedia['banners'] = collect($request->input('banners_paths', []))
-                ->filter()
-                ->map(fn ($path) => ['path' => $path])
-                ->values()
-                ->all();
-        }
-
-        if ($request->filled('company_images_paths')) {
-            $companyMedia['company_images'] = collect($request->input('company_images_paths', []))
-                ->filter()
-                ->map(fn ($path) => ['path' => $path])
-                ->values()
-                ->all();
-        }
-
-        $adminValidations = [];
-        if ($request->filled('admin_validations')) {
-            $adminValidations['admin_validations'] = $request->input('admin_validations', []);
-        }
-
-        
-        $vendor = Vendor::create([
-            'name'          => trim($validated['name']),
-            'email'         => strtolower(trim($validated['email'])),
-            'password'      => bcrypt($validated['password']),
-            'phone'         => $validated['phone'] ?? null,
-            'status'        => $validated['status'],
-            'profile_image' => $profileImagePath,
-            'description'   => $validated['description'] ?? null,
-            'page_type'     => $validated['page_type'],
-            'company_media' => $companyMedia,  
-            'vendor_type'                        => $validated['vendor_type'],
-            'brand_name'                         => $validated['brand_name'] ?? null,
-            'personal_document_type'             => $validated['personal_document_type'] ?? null,
-            'personal_document_number'           => $validated['personal_document_number'] ?? null,
-            'city'                               => $validated['city'] ?? null,
-            'company_name'                       => $validated['company_name'] ?? null,
-            'company_nit'                        => $validated['company_nit'] ?? null,
-            'company_nit_dv'                     => $validated['company_nit_dv'] ?? null,
-            'legal_representative_name'          => $validated['legal_representative_name'] ?? null,
-            'legal_representative_document_type' => $validated['legal_representative_document_type'] ?? null,
-            'legal_representative_document_number' => $validated['legal_representative_document_number'] ?? null,
-            'billing_provider'                   => $validated['billing_provider'],
-            'billing_user'                       => $validated['billing_user'] ?? null,
-            'billing_notes'                      => $validated['billing_notes'] ?? null,
-            'terms_accepted'                     => (bool) ($validated['terms_accepted'] ?? false),
-            'admin_validations'                     => $adminValidations,
-            'approval_updated_by' => auth()->id(),
-            'has_delivery_provider' => (bool) $validated['has_delivery_provider']
-        ]);
-        if (!empty($adminValidations)) {
-            $this->sendValidationAdmin($vendor, $adminValidations);
-        }
-
-        return redirect()->route('admin.vendors.index')
-            ->with('success', 'Proveedor creado correctamente.');
-    }
-
-    public function edit($id)
-    {
-        $vendor = Vendor::findOrFail($id);
-
-        return view('admin.vendors.edit', compact('vendor'));
+        $userId = auth()->guard('vendor')->id();
+        $vendor = Vendor::findOrFail($userId);
+        return view('vendor.settings.index', compact('vendor'));
     }
 
     public function update(Request $request, $id)
@@ -246,6 +117,8 @@ class VendorController extends Controller
         }
         $companyMedia  = $vendor->company_media ?? [];   // base actual
         $mediaModified = false;
+        $companyMedia  = $vendor->company_media ?? [];   // base actual
+        $mediaModified = false;
         $companyMedia = $vendor->company_media ?? [];
         if (is_string($companyMedia)) {
             $decoded = json_decode($companyMedia, true);
@@ -285,12 +158,11 @@ class VendorController extends Controller
          if ($request->filled('admin_validations')) {
             $this->sendValidationAdmin($data,$vendor);
         }
-        return redirect()->route('admin.vendors.index')
+        return redirect()->route('vendor.business.settings.edit')
             ->with('success', 'Proveedor actualizado correctamente.');
     }
 
-
-     /**
+         /**
      * Vista previa de la plantilla de vendor.
      * Si se pasa vendor_id, usa sus datos; si no, usa demo.
      */
@@ -366,105 +238,102 @@ $items = collect($raw)
         //     ]);
         // }
     }
-
-    /**
-     * Vista previa de la plantilla de vendor.
-     * Si se pasa vendor_id, usa sus datos; si no, usa demo.
-     */
-    public function templatePreview(string $pageType, Request $request)
+     public function adminValidationCatalog(Request $request)
     {
-        // vendor_id viene en query: ?vendor_id=123
-        $vendorId = $request->get('vendor_id');
-        $vendor   = Vendor::findOrFail($vendorId);
+        $vendorType = $request->query('vendor_type', 'informal'); // informal|natural|juridica
 
-        // Escogemos la vista según el tipo de landing
-        $view = match ($pageType) {
-            'landing_2' => 'themes.xylo.vendor_templates.landing_2',
-            'landing_3' => 'themes.xylo.vendor_templates.landing_3',
-            default     => 'themes.xylo.vendor_templates.landing_1',
-        };
+        $fields = AdminValidationField::query()
+            ->where('is_active', true)
+            ->where(function ($q) use ($vendorType) {
+                $q->where('applies_to', 'all')
+                ->orWhere('applies_to', $vendorType);
+            })
+            ->orderBy('sort_order')
+            ->orderBy('label')
+            ->get(['id','key','label','applies_to']);
 
-        // Si no hay vendor, usamos solo los defaults de la plantilla
-        if (!$vendor) {
-            return view($view);
+        $reasons = AdminValidationReason::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('label')
+            ->get(['id','value','label']);
+
+        return response()->json([
+            'success' => true,
+            'fields'  => $fields,
+            'reasons' => $reasons,
+        ]);
+    }
+
+    public function adminValidationReasonStore(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'label' => ['required','string','max:120'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Datos inválidos.',
+                'errors'  => $validator->errors(),
+            ], 422);
         }
 
-        // Datos básicos
-        $companyName = $vendor->name ?? 'Demo Company';
+        $label = trim($request->input('label'));
 
-        $logoUrl = $vendor->profile_image
-            ? url('storage/' . $vendor->profile_image)
-            : asset('images/defaults/vendor-logo.png');
+        // value único y estable
+        $base = Str::slug($label, '_');
+        $value = $base ?: ('custom_' . Str::random(6));
 
-        $description = $vendor->description
-            ?? 'Texto descriptivo de la empresa y sus productos. Esta es una descripción de ejemplo por defecto.';
+        // asegurar unicidad
+        $i = 1;
+        while (AdminValidationReason::where('value', $value)->exists()) {
+            $value = $base . '_' . $i;
+            $i++;
+        }
 
-        // Media desde company_media (asegúrate de tener $casts['company_media' => 'array'] en el modelo)
-        $media = $vendor->company_media ?? [];
+        $reason = AdminValidationReason::create([
+            'value'     => $value,
+            'label'     => $label,
+            'is_active' => true,
+            'is_system' => false,
+            'sort_order'=> 999,
+        ]);
 
-        $bannerImages = collect($media['banners'] ?? [])
-            ->map(fn($i) => url('storage/'.$i['path']))
-            ->values()
-            ->all();
-
-        $companyImages = collect($media['company_images'] ?? [])
-            ->map(function($i){
-                $url = url('storage/'.$i['path']);
-
-                return [
-                    'url'  => $url,
-                    'is_video' => str_ends_with(strtolower($i['path']), '.mp4'),
-                ];
-            })
-            ->values()
-            ->all();
-
-
-        // Productos demo (luego se pueden cambiar por productos reales)
-       $products = $vendor->products()
-        ->where('status', 1)                    // o 'active' según tu modelo
-        ->with(['translation', 'images', 'primaryVariant'])
-        ->orderByDesc('created_at')
-        ->take(12)
-        ->get();
-           
-        return view($view, [
-            'companyName'   => $companyName,
-            'logoUrl'       => $logoUrl,
-            'description'   => $description,
-            'bannerImages'  => $bannerImages,
-            'companyMedia'  =>  $companyImages,
-            'products'      => $products,
+        return response()->json([
+            'success' => true,
+            'reason'  => [
+                'id'    => $reason->id,
+                'value' => $reason->value,
+                'label' => $reason->label,
+            ],
         ]);
     }
 
 
-    public function getVendorData()
+
+    public function adminValidationReasonUpdate(Request $request, $id)
     {
-        $vendors = Vendor::select(['id', 'name', 'email', 'phone', 'status', 'has_delivery_provider', 'is_prospect']);
-        
-        return DataTables::of($vendors)
-            ->addColumn('action', function ($vendor) {
-                // AQUÍ está el problema:
-                // $editUrl = route('vendors.edit', $vendor->id);
+        $reason = AdminValidationReason::findOrFail($id);
 
-                $editUrl = route('admin.vendors.edit', $vendor->id); // ← usa el nombre correcto
+        $validator = Validator::make($request->all(), [
+            'label'     => ['required','string','max:120'],
+            'is_active' => ['required','boolean'],
+        ]);
 
-                return '
-                    <a href="'.$editUrl.'" class="border border-primary dt-edit rounded-3 d-inline-block me-2 px-2 py-1">
-                        <i class="bi bi-pencil-fill text-primary"></i>
-                    </a>
-                    <span class="border border-danger dt-trash rounded-3 d-inline-block px-2 py-1"
-                        onclick="deleteVendor('.$vendor->id.')">
-                        <i class="bi bi-trash-fill text-danger"></i>
-                    </span>
-                ';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $reason->update([
+            'label' => trim($request->label),
+            'is_active' => (bool)$request->is_active,
+        ]);
+
+        return back()->with('success', 'Motivo actualizado.');
     }
 
-    public function resizeMedia(Request $request)
+     public function resizeMedia(Request $request)
     {
         $request->validate([
             'type'     => 'required|in:banner,company',
@@ -570,100 +439,74 @@ $items = collect($raw)
         ]);
     }
 
-
-    public function adminValidationCatalog(Request $request)
+    /**
+     * Vista previa de la plantilla de vendor.
+     * Si se pasa vendor_id, usa sus datos; si no, usa demo.
+     */
+    public function templatePreview(string $pageType, Request $request)
     {
-        $vendorType = $request->query('vendor_type', 'informal'); // informal|natural|juridica
+        // vendor_id viene en query: ?vendor_id=123
+        $vendorId = $request->get('vendor_id');
+        $vendor   = Vendor::findOrFail($vendorId);
 
-        $fields = AdminValidationField::query()
-            ->where('is_active', true)
-            ->where(function ($q) use ($vendorType) {
-                $q->where('applies_to', 'all')
-                ->orWhere('applies_to', $vendorType);
+        // Escogemos la vista según el tipo de landing
+        $view = match ($pageType) {
+            'landing_2' => 'themes.xylo.vendor_templates.landing_2',
+            'landing_3' => 'themes.xylo.vendor_templates.landing_3',
+            default     => 'themes.xylo.vendor_templates.landing_1',
+        };
+
+        // Si no hay vendor, usamos solo los defaults de la plantilla
+        if (!$vendor) {
+            return view($view);
+        }
+
+        // Datos básicos
+        $companyName = $vendor->name ?? 'Demo Company';
+
+        $logoUrl = $vendor->profile_image
+            ? url('storage/' . $vendor->profile_image)
+            : asset('images/defaults/vendor-logo.png');
+
+        $description = $vendor->description
+            ?? 'Texto descriptivo de la empresa y sus productos. Esta es una descripción de ejemplo por defecto.';
+
+        // Media desde company_media (asegúrate de tener $casts['company_media' => 'array'] en el modelo)
+        $media = $vendor->company_media ?? [];
+
+        $bannerImages = collect($media['banners'] ?? [])
+            ->map(fn($i) => url('storage/'.$i['path']))
+            ->values()
+            ->all();
+
+        $companyImages = collect($media['company_images'] ?? [])
+            ->map(function($i){
+                $url = url('storage/'.$i['path']);
+
+                return [
+                    'url'  => $url,
+                    'is_video' => str_ends_with(strtolower($i['path']), '.mp4'),
+                ];
             })
-            ->orderBy('sort_order')
-            ->orderBy('label')
-            ->get(['id','key','label','applies_to']);
+            ->values()
+            ->all();
 
-        $reasons = AdminValidationReason::query()
-            ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->orderBy('label')
-            ->get(['id','value','label']);
 
-        return response()->json([
-            'success' => true,
-            'fields'  => $fields,
-            'reasons' => $reasons,
+        // Productos demo (luego se pueden cambiar por productos reales)
+       $products = $vendor->products()
+        ->where('status', 1)                    // o 'active' según tu modelo
+        ->with(['translation', 'images', 'primaryVariant'])
+        ->orderByDesc('created_at')
+        ->take(12)
+        ->get();
+           
+        return view($view, [
+            'companyName'   => $companyName,
+            'logoUrl'       => $logoUrl,
+            'description'   => $description,
+            'bannerImages'  => $bannerImages,
+            'companyMedia'  =>  $companyImages,
+            'products'      => $products,
         ]);
     }
-
-    public function adminValidationReasonStore(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'label' => ['required','string','max:120'],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Datos inválidos.',
-                'errors'  => $validator->errors(),
-            ], 422);
-        }
-
-        $label = trim($request->input('label'));
-
-        // value único y estable
-        $base = Str::slug($label, '_');
-        $value = $base ?: ('custom_' . Str::random(6));
-
-        // asegurar unicidad
-        $i = 1;
-        while (AdminValidationReason::where('value', $value)->exists()) {
-            $value = $base . '_' . $i;
-            $i++;
-        }
-
-        $reason = AdminValidationReason::create([
-            'value'     => $value,
-            'label'     => $label,
-            'is_active' => true,
-            'is_system' => false,
-            'sort_order'=> 999,
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'reason'  => [
-                'id'    => $reason->id,
-                'value' => $reason->value,
-                'label' => $reason->label,
-            ],
-        ]);
-    }
-
-
-
-    public function adminValidationReasonUpdate(Request $request, $id)
-    {
-        $reason = AdminValidationReason::findOrFail($id);
-
-        $validator = Validator::make($request->all(), [
-            'label'     => ['required','string','max:120'],
-            'is_active' => ['required','boolean'],
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
-        $reason->update([
-            'label' => trim($request->label),
-            'is_active' => (bool)$request->is_active,
-        ]);
-
-        return back()->with('success', 'Motivo actualizado.');
-    }
-
 }
