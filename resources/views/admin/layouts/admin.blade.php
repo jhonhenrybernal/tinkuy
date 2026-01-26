@@ -52,7 +52,13 @@
             </div>
              <div class="dropdown">
                 <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
-                   <img src="{{ auth()->user()->profile_image
+                   <img src="\tukary\images\admin\avatar\general.webp"
+                        class="rounded-circle"
+                        alt="Profile"
+                        width="40"
+                        height="40"
+                        style="object-fit:cover;">
+                   <!-- <img src="{{ auth()->user()->profile_image
                         ? (\Illuminate\Support\Str::startsWith(auth()->user()->profile_image, ['http://', 'https://'])
                             ? auth()->user()->profile_image
                             : asset('storage/' . auth()->user()->profile_image))
@@ -61,7 +67,7 @@
                         alt="Profile"
                         width="40"
                         height="40"
-                        style="object-fit:cover;">
+                        style="object-fit:cover;"> -->
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3">
                     <li>

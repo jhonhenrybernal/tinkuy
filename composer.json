@@ -1,7 +1,7 @@
 {
-    "name": "devquick/nokay",
+    "name": "devquick/tukary",
     "type": "project",
-    "description": "Nokay – Plataforma de Comercio Electrónico para Productos Industriales en Colombia",
+    "description": "Tukary – Plataforma de Comercio Electrónico para Productos Industriales en Colombia",
     "keywords": ["laravel", "ecommerce", "boilerplate", "multi-vendor", "multilingual"],
     "license": "MIT",
     "require": {
@@ -69,6 +69,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

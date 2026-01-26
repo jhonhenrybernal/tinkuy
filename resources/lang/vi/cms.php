@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'velstore' => 'Nokay',
+        'velstore' => 'Tukary',
         'login' => 'Đăng nhập',
         'email' => 'Địa chỉ Email',
         'password' => 'Mật khẩu',

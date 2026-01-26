@@ -6,7 +6,7 @@
 
             <div class="modal-header">
                 <h5 class="modal-title" id="termsModalJuridicaLabel">
-                    Términos y Condiciones – Nokay (Vendedor persona jurídica)
+                    Términos y Condiciones – Tukary (Vendedor persona jurídica)
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Cerrar"></button>
@@ -15,7 +15,7 @@
             <div class="modal-body">
 
                 <p>
-                    El presente documento regula el acceso y uso de la plataforma Nokay por parte de la sociedad
+                    El presente documento regula el acceso y uso de la plataforma Tukary por parte de la sociedad
                     <strong class="tc-company-name">[Razón social]</strong>,
                     quien comercializa bajo la marca
                     <strong class="tc-brand-name">[Nombre de marca]</strong>,
@@ -27,8 +27,8 @@
 
                 <h6 class="mt-3 mb-2">1. Naturaleza del servicio</h6>
                 <p>
-                    Nokay es una plataforma digital de intermediación que conecta a compradores con vendedores de productos colombianos.
-                    Nokay <strong>NO</strong> es fabricante, distribuidor ni dueño de los productos, y <strong>NO</strong> participa directamente
+                    Tukary es una plataforma digital de intermediación que conecta a compradores con vendedores de productos colombianos.
+                    Tukary <strong>NO</strong> es fabricante, distribuidor ni dueño de los productos, y <strong>NO</strong> participa directamente
                     en la compraventa.
                 </p>
 
@@ -44,7 +44,7 @@
                 </ul>
 
                 <p class="mb-2">
-                    Nokay no se hace responsable por:
+                    Tukary no se hace responsable por:
                 </p>
                 <ul class="mb-3">
                     <li>Incumplimientos del vendedor.</li>
@@ -63,7 +63,7 @@
                 </ul>
 
                 <p class="mb-2">
-                    Nokay se reserva el derecho de:
+                    Tukary se reserva el derecho de:
                 </p>
                 <ul class="mb-3">
                     <li>Suspender cuentas.</li>
@@ -73,13 +73,13 @@
 
                 <h6 class="mt-3 mb-2">4. Pagos y comisiones</h6>
                 <p>
-                    Nokay podrá cobrar una comisión por el uso de la plataforma. Los valores, porcentajes y métodos de pago
+                    Tukary podrá cobrar una comisión por el uso de la plataforma. Los valores, porcentajes y métodos de pago
                     serán informados dentro de la aplicación.
                 </p>
 
                 <h6 class="mt-3 mb-2">5. Modificaciones</h6>
                 <p class="mb-0">
-                    Nokay podrá modificar estos Términos y Condiciones cuando lo considere necesario.
+                    Tukary podrá modificar estos Términos y Condiciones cuando lo considere necesario.
                     El uso continuo de la plataforma implica aceptación de los cambios.
                 </p>
 
