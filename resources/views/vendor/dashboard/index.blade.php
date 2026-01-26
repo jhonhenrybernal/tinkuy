@@ -106,5 +106,100 @@
         </div>
 
     </div>
+    @if(!session('meets_requirements'))
+        <div class="mt-2 alert alert-warning py-2 px-3 mb-0">
+            <small>
+                <strong>Política del servicio:</strong> superaste los parámetros mensuales establecidos.
+                <br>
+                Límite de órdenes completadas: <strong>{{ config('vendor.min_completed_orders') }}</strong> ·
+                Límite de ventas: <strong>${{ number_format(config('vendor.min_wage_current'), 0) }}</strong>
+
+                <hr class="my-2">
+
+                <strong>Opciones disponibles:</strong>
+                <ol class="mb-2 ps-3">
+                    <li><strong>Esperar al próximo mes</strong> para que se reinicien los contadores mensuales.</li>
+                    <li>
+                        <strong>Formalizar tu actividad</strong> (persona natural o jurídica) y continuar sin restricción.
+
+                        <div class="mt-2">
+                            <div class="fw-semibold">Documentos básicos en Colombia</div>
+
+                            <ul class="mb-2 ps-3">
+                                <li><strong>Persona natural (comerciante)</strong>
+                                    <ul class="mb-2 ps-3">
+                                        <li>Cédula de ciudadanía (o cédula de extranjería / pasaporte si aplica).</li>
+                                        <li><strong>RUT</strong> (Registro Único Tributario) actualizado.</li>
+                                        <li><strong>Matrícula mercantil</strong> en Cámara de Comercio (si actúas como comerciante).</li>
+                                        <li>Cuenta bancaria a tu nombre (para pagos).</li>
+                                        <li>Certificación bancaria (cuando aplique).</li>
+                                        <li>Responsabilidad fiscal / régimen en DIAN (según tu actividad).</li>
+                                    </ul>
+                                </li>
+
+                                <li><strong>Persona jurídica (empresa)</strong>
+                                    <ul class="mb-2 ps-3">
+                                        <li><strong>NIT</strong> y <strong>RUT</strong> de la empresa actualizado.</li>
+                                        <li><strong>Cámara de Comercio</strong>: certificado de existencia y representación legal (vigente).</li>
+                                        <li>Documento del representante legal (CC/CE/PP) + datos de contacto.</li>
+                                        <li>Acta o documento de constitución / estatutos (según tipo de sociedad).</li>
+                                        <li>Cuenta bancaria a nombre de la empresa + certificación bancaria.</li>
+                                        <li>Si aplica: autorización para facturación electrónica / proveedor tecnológico.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <small class="text-muted">
+                                Nota: los requisitos exactos pueden variar según ciudad, actividad económica y régimen tributario.
+                            </small>
+                        </div>
+                    </li>
+
+                </ol>
+
+                <button type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        id="btn-show-terms">
+                    Leer términos y condiciones
+                </button>
+            </small>
+        </div>
+    @endif
+@include('vendor.layouts.partials.terms_natural')
 </div>
 @endsection
+@section('js')
+<script>
+    // Si en dashboard NO tienes vendor_type por radios, lo sacas del vendor (backend)
+    const DASH_VENDOR_TYPE = @json($vendor->vendor_type ?? 'natural');
+
+    function openTermsModalDashboard() {
+        // Si quieres reusar updateTermsPreview(), puedes copiar esa función aquí también.
+        // Si no, simplemente abre el modal.
+
+        let modalId = 'termsModalInformal';
+
+        if (DASH_VENDOR_TYPE === 'natural') modalId = 'termsModalNatural';
+        if (DASH_VENDOR_TYPE === 'juridica') modalId = 'termsModalJuridica';
+        if (DASH_VENDOR_TYPE === 'informal') modalId = 'termsModalInformal';
+
+        const modalEl = document.getElementById(modalId);
+        if (!modalEl) return;
+
+        let modal = bootstrap.Modal.getInstance(modalEl);
+        if (!modal) modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const btnShowTerms = document.getElementById('btn-show-terms');
+        if (btnShowTerms) {
+            btnShowTerms.addEventListener('click', function (e) {
+                e.preventDefault();
+                openTermsModalDashboard();
+            });
+        }
+    });
+</script>
+@endsection
+
