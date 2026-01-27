@@ -3,7 +3,7 @@
     <div class="row">
       <!-- Column 1: Logo -->
       <div class="col-12 col-md-3 mb-4">
-        <img src="tukary\images\logo\logo-tukary.png" alt="Velstore Logo" class="img-fluid" style="max-width: 100px;">
+        <img src="\tukary\images\logo\logo-tukary.png" alt="Tukary Logo" class="img-fluid" style="max-width: 100px;">
       </div>
 
       <!-- Column 2: Account -->

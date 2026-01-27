@@ -31,7 +31,7 @@
         <div class="row align-items-center">
             <div class="col-md-4 col-6">
                 <a href="{{ route('xylo.home') }}" class="navbar-brand">
-                    <img src="tukary\images\logo\logo-tukary.png" width="80" alt="Logo" />
+                    <img src="\tukary\images\logo\logo-tukary-principal-centro.png" width="200" alt="Logo" />
                 </a>
             </div>
             <div class="col-md-8 col-6 text-end">
